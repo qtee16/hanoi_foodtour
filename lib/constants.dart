@@ -11,6 +11,8 @@ class AppColors {
   static const greyColor = Color(0xFFD9D9D9);
   static const greyBackground = Color(0xFFEEEEEE);
   static const greyText = Color(0xFF7D7D7D);
+  static const greyBorder = Color(0xFFC2BEBE);
+  static const yellowColor = Color(0xFFFFD864);
 }
 
 class AssetPaths {
@@ -30,4 +32,10 @@ class IconPath {
   final getCoinIconPath = "assets/icons/coin.png";
   final getStarIconPath = "assets/icons/star.png";
   final getLocationIconPath = "assets/icons/location.png";
+  final getHeartIconPath = "assets/icons/heart_fill.png";
+  final getRouteIconPath = "assets/icons/route.png";
+  final getLikeOutlineIconPath = "assets/icons/like-outline.png";
+  final getLikeFillIconPath = "assets/icons/like-fill.png";
+  final getDislikeOutlineIconPath = "assets/icons/dislike-outline.png";
+  final getDislikeFillIconPath = "assets/icons/dislike-fill.png";
 }
