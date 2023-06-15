@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:hanoi_foodtour/constants.dart';
-import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
-import 'package:hanoi_foodtour/widgets/comment_widget.dart';
-import 'package:hanoi_foodtour/widgets/content_container.dart';
-import 'package:hanoi_foodtour/widgets/custom_rating_widget.dart';
-import 'package:hanoi_foodtour/widgets/list_card_item.dart';
 
+import '../../constants.dart';
 import '../../routes/navigation_services.dart';
+import '../../widgets/cached_image_widget.dart';
+import '../../widgets/comment_widget.dart';
+import '../../widgets/content_container.dart';
+import '../../widgets/custom_rating_widget.dart';
+import '../../widgets/list_card_item.dart';
 
-class RestaurantDetail extends StatefulWidget {
-  const RestaurantDetail({super.key});
+class FoodDetailScreen extends StatefulWidget {
+  const FoodDetailScreen({super.key});
 
   @override
-  State<RestaurantDetail> createState() => _RestaurantDetailState();
+  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
 }
 
-class _RestaurantDetailState extends State<RestaurantDetail> {
+class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width;
-
+    
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

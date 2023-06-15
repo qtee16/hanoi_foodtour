@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hanoi_foodtour/views/auth/sign_in.dart';
-import 'package:hanoi_foodtour/views/auth/sign_up.dart';
-import 'package:hanoi_foodtour/views/food/food_detail.dart';
+import 'package:hanoi_foodtour/views/auth/sign_in_screen.dart';
+import 'package:hanoi_foodtour/views/auth/sign_up_screen.dart';
+import 'package:hanoi_foodtour/views/comment/comment_screen.dart';
+import 'package:hanoi_foodtour/views/food/food_detail_screen.dart';
 import 'package:hanoi_foodtour/views/home/home.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
@@ -22,12 +23,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case ROUTER_SIGN_IN:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const SignIn(),
+        viewToShow: const SignInScreen(),
       );
     case ROUTER_SIGN_UP:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const SignUp(),
+        viewToShow: const SignUpScreen(),
       );
     case ROUTER_HOME:
       return _getPageRoute(
@@ -47,12 +48,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case ROUTER_FOOD_DETAIL:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const FoodDetail(),
+        viewToShow: const FoodDetailScreen(),
       );
     case ROUTER_RESTAURANT_DETAIL:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const RestaurantDetail(),
+      );
+    case ROUTER_COMMENT:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const CommentScreen(),
       );
     default:
       return MaterialPageRoute(

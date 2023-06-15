@@ -6,3 +6,4 @@ const String ROUTER_PROFILE_DETAIL = '/profile-detail';
 const String ROUTER_SPLASH = '/splash';
 const String ROUTER_FOOD_DETAIL = '/food-detail';
 const String ROUTER_RESTAURANT_DETAIL = '/restaurant-detail';
+const String ROUTER_COMMENT = '/comment';
