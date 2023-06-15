@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 import '../../routes/routes.dart';
 import '../../widgets/custom_text_field.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController nameController,
       emailController,
       passwordController,
