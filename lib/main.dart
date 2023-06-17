@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hanoi_foodtour/injection.dart';
 import 'package:hanoi_foodtour/repositories/general_repo.dart';
-import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
 import 'package:provider/provider.dart';
 

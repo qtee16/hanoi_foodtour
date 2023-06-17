@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:hanoi_foodtour/constants.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/comment_widget.dart';

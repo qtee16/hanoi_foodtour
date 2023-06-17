@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../routes/navigation_services.dart';
-import '../../widgets/cached_image_widget.dart';
 import '../../widgets/comment_widget.dart';
 import '../../widgets/content_container.dart';
 import '../../widgets/custom_rating_widget.dart';
@@ -27,8 +26,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             children: [
               Container(
                 width: maxWidth,
-                height: 280,
+                height: 360,
                 child: Stack(
+                  alignment: Alignment.center,
                   children: [
                     Positioned(
                       top: 0,
@@ -43,33 +43,105 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     Positioned(
                       top: 240,
                       left: 0,
+                      right: 0,
                       child: Container(
-                        height: 40,
+                        height: 120,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
                       ),
                     ),
                     Positioned(
-                      top: 120,
-                      left: 16,
+                      top: 180,
                       child: Container(
+                        padding: const EdgeInsets.all(16),
                         height: 160,
-                        width: 160,
+                        width: 300,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(80),
                           color: AppColors.whiteColor,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                    const Positioned(
-                      top: 124,
-                      left: 20,
-                      child: CachedImageWidget(
-                        imageURL:
-                            "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
-                        width: 152,
-                        height: 152,
-                        border: 76,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text("Phở bò tái chín", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),), 
+                            const SizedBox(height: 12,),
+                            Text("35.000 VND", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),),
+                            const SizedBox(height: 12,),
+                            Row(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      AssetPaths.iconPath.getStarIconPath,
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.cover,
+                                      filterQuality: FilterQuality.high,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    const Text(
+                                      "4.3 (100 đánh giá)",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 20,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      AssetPaths.iconPath.getHeartIconPath,
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.cover,
+                                      filterQuality: FilterQuality.high,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    const Text(
+                                      "50",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  AssetPaths.iconPath.getLocationIconPath,
+                                  width: 20,
+                                  height: 20,
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.high,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Expanded(
+                                  child: const Text(
+                                    "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Positioned(
@@ -98,177 +170,177 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: 16,
-                      left: 16,
-                      right: 16,
-                      bottom: 16,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    color: AppColors.whiteColor,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Phở Bát Đàn",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              AssetPaths.iconPath.getLocationIconPath,
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Container(
-                              width: 300,
-                              child: const Text(
-                                "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              AssetPaths.iconPath.getStarIconPath,
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Container(
-                              width: 300,
-                              child: const Text(
-                                "4.3 (100 đánh giá)",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              AssetPaths.iconPath.getHeartIconPath,
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Container(
-                              width: 300,
-                              child: const Text(
-                                "50",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          "Danh mục món ăn",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Wrap(
-                          children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.only(
+                  //     top: 16,
+                  //     left: 16,
+                  //     right: 16,
+                  //     bottom: 16,
+                  //   ),
+                  //   width: MediaQuery.of(context).size.width,
+                  //   color: AppColors.whiteColor,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       const Text(
+                  //         "Phở Bát Đàn",
+                  //         style: TextStyle(
+                  //             fontSize: 24, fontWeight: FontWeight.bold),
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 12,
+                  //       ),
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         children: [
+                  //           Image.asset(
+                  //             AssetPaths.iconPath.getLocationIconPath,
+                  //             width: 20,
+                  //             height: 20,
+                  //             fit: BoxFit.cover,
+                  //             filterQuality: FilterQuality.high,
+                  //           ),
+                  //           const SizedBox(
+                  //             width: 4,
+                  //           ),
+                  //           Container(
+                  //             width: 300,
+                  //             child: const Text(
+                  //               "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                  //               overflow: TextOverflow.ellipsis,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 8,
+                  //       ),
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         children: [
+                  //           Image.asset(
+                  //             AssetPaths.iconPath.getStarIconPath,
+                  //             width: 20,
+                  //             height: 20,
+                  //             fit: BoxFit.cover,
+                  //             filterQuality: FilterQuality.high,
+                  //           ),
+                  //           const SizedBox(
+                  //             width: 4,
+                  //           ),
+                  //           Container(
+                  //             width: 300,
+                  //             child: const Text(
+                  //               "4.3 (100 đánh giá)",
+                  //               overflow: TextOverflow.ellipsis,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 8,
+                  //       ),
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         children: [
+                  //           Image.asset(
+                  //             AssetPaths.iconPath.getHeartIconPath,
+                  //             width: 20,
+                  //             height: 20,
+                  //             fit: BoxFit.cover,
+                  //             filterQuality: FilterQuality.high,
+                  //           ),
+                  //           const SizedBox(
+                  //             width: 4,
+                  //           ),
+                  //           Container(
+                  //             width: 300,
+                  //             child: const Text(
+                  //               "50",
+                  //               overflow: TextOverflow.ellipsis,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 16,
+                  //       ),
+                  //       const Text(
+                  //         "Danh mục món ăn",
+                  //         style: TextStyle(
+                  //           fontSize: 20,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 8,
+                  //       ),
+                  //       Wrap(
+                  //         children: [
+                  //           Container(
+                  //             margin:
+                  //                 const EdgeInsets.only(bottom: 4, right: 4),
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 12, vertical: 8),
+                  //             decoration: BoxDecoration(
+                  //                 borderRadius: BorderRadius.circular(16),
+                  //                 color: Colors.orange),
+                  //             child: Text(
+                  //               "Phở",
+                  //               style: const TextStyle(
+                  //                   color: AppColors.whiteColor),
+                  //             ),
+                  //           ),
+                  //           Container(
+                  //             margin:
+                  //                 const EdgeInsets.only(bottom: 4, right: 4),
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 12, vertical: 8),
+                  //             decoration: BoxDecoration(
+                  //                 borderRadius: BorderRadius.circular(16),
+                  //                 color: Colors.orange),
+                  //             child: Text(
+                  //               "Phở",
+                  //               style: const TextStyle(
+                  //                   color: AppColors.whiteColor),
+                  //             ),
+                  //           ),
+                  //           Container(
+                  //             margin:
+                  //                 const EdgeInsets.only(bottom: 4, right: 4),
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 12, vertical: 8),
+                  //             decoration: BoxDecoration(
+                  //                 borderRadius: BorderRadius.circular(16),
+                  //                 color: Colors.orange),
+                  //             child: Text(
+                  //               "Phở",
+                  //               style: const TextStyle(
+                  //                   color: AppColors.whiteColor),
+                  //             ),
+                  //           ),
+                  //           Container(
+                  //             margin:
+                  //                 const EdgeInsets.only(bottom: 4, right: 4),
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 12, vertical: 8),
+                  //             decoration: BoxDecoration(
+                  //                 borderRadius: BorderRadius.circular(16),
+                  //                 color: Colors.orange),
+                  //             child: Text(
+                  //               "Phở",
+                  //               style: const TextStyle(
+                  //                   color: AppColors.whiteColor),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
                   Container(
                     padding: const EdgeInsets.all(16),
                     width: MediaQuery.of(context).size.width,
@@ -297,7 +369,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 height: 8,
               ),
               const ListCardItem(
-                title: "Menu của quán",
+                title: "Những món ăn khác của quán",
                 subTitle: "Khám phá các món ăn đa dạng",
               ),
               const SizedBox(
