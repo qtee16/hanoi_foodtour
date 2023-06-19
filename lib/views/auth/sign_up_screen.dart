@@ -148,7 +148,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         password: password,
                                       );
                                   NavigationService()
-                                      .pushNameAndRemoveUntil(ROUTER_HOME);
+                                      .pushNameAndRemoveUntil(ROUTE_HOME);
                                 } catch (err) {
                                   print(err.toString());
                                 }

@@ -9,14 +9,14 @@ import '../../models/user.dart';
 import '../../widgets/cached_image_widget.dart';
 import '../../widgets/list_card_item.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     User? currentUser = context.watch<AuthViewModel>().currentUser;
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
                         ),
                         InkWell(
                           onTap: () {
-                            NavigationService().pushNamed(ROUTER_PROFILE);
+                            NavigationService().pushNamed(ROUTE_PROFILE);
                           },
                           child: isLogin && currentUser.avatarUrl != null
                               ? CachedImageWidget(

@@ -83,7 +83,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         const SizedBox(height: 16,),
         TextButton(
           onPressed: () {
-            NavigationService().pushNamed(ROUTER_COMMENT);
+            NavigationService().pushNamed(ROUTE_COMMENT);
           }, 
           child: Text(
             "Xem tất cả bình luận", 

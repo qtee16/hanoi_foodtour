@@ -104,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         password: password,
                                       );
                                   NavigationService()
-                                      .pushNameAndRemoveUntil(ROUTER_HOME);
+                                      .pushNameAndRemoveUntil(ROUTE_HOME);
                                 } catch (e) {
                                   print(e);
                                 }
@@ -130,7 +130,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                NavigationService().pushNamed(ROUTER_SIGN_UP);
+                                NavigationService().pushNamed(ROUTE_SIGN_UP);
                               },
                               child: const Text(
                                 "Đăng ký ngay",
