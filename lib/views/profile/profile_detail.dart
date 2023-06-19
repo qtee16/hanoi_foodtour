@@ -25,7 +25,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
           child: ElevatedButton(
         onPressed: () async {
           await context.read<AuthViewModel>().signOut();
-          NavigationService().pushNameAndRemoveUntil(ROUTER_HOME);
+          NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
         },
         child: Text("Sign out"),
       )),

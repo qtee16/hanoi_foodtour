@@ -4,18 +4,18 @@ import 'package:hanoi_foodtour/constants.dart';
 class ListItem extends StatelessWidget {
   final String icon;
   final String title;
-  final Function callback;
+  final Function onTap;
   const ListItem(
       {super.key,
       required this.icon,
       required this.title,
-      required this.callback});
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        callback.call();
+        onTap.call();
       },
       child: Container(
         width: double.infinity,

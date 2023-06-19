@@ -28,9 +28,9 @@ class _SplashState extends State<Splash> {
     checkLogined().then((value) {
       if (value) {
         context.read<AuthViewModel>().fetchCurrentUser().then(
-            (value) => NavigationService().pushNameAndRemoveUntil(ROUTER_HOME));
+            (value) => NavigationService().pushNameAndRemoveUntil(ROUTE_HOME));
       } else {
-        NavigationService().pushNameAndRemoveUntil(ROUTER_HOME);
+        NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
       }
     });
   }

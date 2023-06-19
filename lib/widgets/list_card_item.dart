@@ -72,10 +72,10 @@ class ListCardItem extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (isFoodList) {
-                          NavigationService().pushNamed(ROUTER_FOOD_DETAIL);
+                          NavigationService().pushNamed(ROUTE_FOOD_DETAIL);
                         } else {
                           NavigationService()
-                              .pushNamed(ROUTER_RESTAURANT_DETAIL);
+                              .pushNamed(ROUTE_RESTAURANT_DETAIL);
                         }
                       },
                       child: Container(

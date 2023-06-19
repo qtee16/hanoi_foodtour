@@ -3,10 +3,12 @@ import 'package:hanoi_foodtour/views/auth/sign_in_screen.dart';
 import 'package:hanoi_foodtour/views/auth/sign_up_screen.dart';
 import 'package:hanoi_foodtour/views/comment/comment_screen.dart';
 import 'package:hanoi_foodtour/views/food/food_detail_screen.dart';
-import 'package:hanoi_foodtour/views/home/home.dart';
+import 'package:hanoi_foodtour/views/home/home_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
 import 'package:hanoi_foodtour/views/restaurant/restaurant_detail.dart';
+import 'package:hanoi_foodtour/views/review/review_overview_screen.dart';
+import 'package:hanoi_foodtour/views/review/review_restaurant_screen.dart';
 import 'package:hanoi_foodtour/views/splash/splash.dart';
 
 import 'routes.dart';
@@ -15,50 +17,60 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   Map<String, dynamic>? arguments =
       settings.arguments as Map<String, dynamic>? ?? {};
   switch (settings.name) {
-    case ROUTER_SPLASH:
+    case ROUTE_SPLASH:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const Splash(),
       );
-    case ROUTER_SIGN_IN:
+    case ROUTE_SIGN_IN:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const SignInScreen(),
       );
-    case ROUTER_SIGN_UP:
+    case ROUTE_SIGN_UP:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const SignUpScreen(),
       );
-    case ROUTER_HOME:
+    case ROUTE_HOME:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const Home(),
+        viewToShow: const HomeScreen(),
       );
-    case ROUTER_PROFILE:
+    case ROUTE_PROFILE:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const Profile(),
       );
-    case ROUTER_PROFILE_DETAIL:
+    case ROUTE_PROFILE_DETAIL:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const ProfileDetail(),
       );
-    case ROUTER_FOOD_DETAIL:
+    case ROUTE_FOOD_DETAIL:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const FoodDetailScreen(),
       );
-    case ROUTER_RESTAURANT_DETAIL:
+    case ROUTE_RESTAURANT_DETAIL:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const RestaurantDetail(),
       );
-    case ROUTER_COMMENT:
+    case ROUTE_COMMENT:
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const CommentScreen(),
+      );
+    case ROUTE_REVIEW_OVERVIEW:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const ReviewOverviewScreen(),
+      );
+    case ROUTE_REVIEW_RESTAURANT:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const ReviewRestaurantScreen(),
       );
     default:
       return MaterialPageRoute(
