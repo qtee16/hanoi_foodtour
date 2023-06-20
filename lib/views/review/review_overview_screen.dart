@@ -23,7 +23,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
       appBar: AppBar(
         title: const Text(
           "Danh sách quán đã review",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
       body: Column(
@@ -86,7 +86,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                             CachedImageWidget(
                               width: 80,
                               height: 80,
-                              border: 10,
+                              border: 8,
                               imageURL: "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
                             ),
                             const SizedBox(width: 20,),
@@ -98,7 +98,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                   Text(
                                     "Phở Bát Đàn",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -109,8 +109,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getStarIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -119,6 +119,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "4.3 (100 đánh giá)",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -129,8 +130,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getHeartIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -139,6 +140,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "50",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -150,8 +152,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                     children: [
                                       Image.asset(
                                         AssetPaths.iconPath.getLocationIconPath,
-                                        width: 20,
-                                        height: 20,
+                                        width: 14,
+                                        height: 14,
                                         fit: BoxFit.cover,
                                         filterQuality: FilterQuality.high,
                                       ),
@@ -161,6 +163,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                       Expanded(
                                         child: const Text(
                                           "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                                          style: TextStyle(fontSize: 12),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -187,7 +190,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                             CachedImageWidget(
                               width: 80,
                               height: 80,
-                              border: 10,
+                              border: 8,
                               imageURL: "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
                             ),
                             const SizedBox(width: 20,),
@@ -199,7 +202,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                   Text(
                                     "Phở Bát Đàn",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -210,8 +213,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getStarIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -220,6 +223,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "4.3 (100 đánh giá)",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -230,8 +234,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getHeartIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -240,6 +244,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "50",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -251,8 +256,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                     children: [
                                       Image.asset(
                                         AssetPaths.iconPath.getLocationIconPath,
-                                        width: 20,
-                                        height: 20,
+                                        width: 14,
+                                        height: 14,
                                         fit: BoxFit.cover,
                                         filterQuality: FilterQuality.high,
                                       ),
@@ -262,6 +267,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                       Expanded(
                                         child: const Text(
                                           "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                                          style: TextStyle(fontSize: 12),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -288,7 +294,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                             CachedImageWidget(
                               width: 80,
                               height: 80,
-                              border: 10,
+                              border: 8,
                               imageURL: "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
                             ),
                             const SizedBox(width: 20,),
@@ -300,7 +306,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                   Text(
                                     "Phở Bát Đàn",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -311,8 +317,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getStarIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -321,6 +327,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "4.3 (100 đánh giá)",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -331,8 +338,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getHeartIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -341,6 +348,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "50",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -352,8 +360,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                     children: [
                                       Image.asset(
                                         AssetPaths.iconPath.getLocationIconPath,
-                                        width: 20,
-                                        height: 20,
+                                        width: 14,
+                                        height: 14,
                                         fit: BoxFit.cover,
                                         filterQuality: FilterQuality.high,
                                       ),
@@ -363,6 +371,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                       Expanded(
                                         child: const Text(
                                           "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                                          style: TextStyle(fontSize: 12),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -389,7 +398,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                             CachedImageWidget(
                               width: 80,
                               height: 80,
-                              border: 10,
+                              border: 8,
                               imageURL: "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
                             ),
                             const SizedBox(width: 20,),
@@ -401,7 +410,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                   Text(
                                     "Phở Bát Đàn",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -412,8 +421,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getStarIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -422,6 +431,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "4.3 (100 đánh giá)",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -432,8 +442,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                         children: [
                                           Image.asset(
                                             AssetPaths.iconPath.getHeartIconPath,
-                                            width: 20,
-                                            height: 20,
+                                            width: 14,
+                                            height: 14,
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -442,6 +452,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                           ),
                                           const Text(
                                             "50",
+                                            style: TextStyle(fontSize: 12),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
@@ -453,8 +464,8 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                     children: [
                                       Image.asset(
                                         AssetPaths.iconPath.getLocationIconPath,
-                                        width: 20,
-                                        height: 20,
+                                        width: 14,
+                                        height: 14,
                                         fit: BoxFit.cover,
                                         filterQuality: FilterQuality.high,
                                       ),
@@ -464,6 +475,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                                       Expanded(
                                         child: const Text(
                                           "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                                          style: TextStyle(fontSize: 12),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),

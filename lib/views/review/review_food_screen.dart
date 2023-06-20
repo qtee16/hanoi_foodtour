@@ -3,24 +3,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hanoi_foodtour/constants.dart';
-import 'package:hanoi_foodtour/routes/navigation_services.dart';
-import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/services/location_service.dart';
 import 'package:hanoi_foodtour/services/select_image.dart';
 
 import '../../widgets/form_field_widget.dart';
 import '../../widgets/multi_select.dart';
 
-class ReviewRestaurantScreen extends StatefulWidget {
-  const ReviewRestaurantScreen({super.key});
+class ReviewFoodScreen extends StatefulWidget {
+  const ReviewFoodScreen({super.key});
 
   @override
-  State<ReviewRestaurantScreen> createState() => _ReviewRestaurantScreenState();
+  State<ReviewFoodScreen> createState() => _ReviewFoodScreenState();
 }
 
-class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
-  final restaurantNameController = TextEditingController();
-  final addressController = TextEditingController();
+class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
+  final foodNameController = TextEditingController();
+  final costController = TextEditingController();
   final locationController = TextEditingController();
   final reviewController = TextEditingController();
 
@@ -51,7 +49,7 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         title: const Text(
-          "Review quán mới",
+          "Review món mới",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
@@ -62,45 +60,45 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FormFieldWidget(
-                title: "Tên quán",
-                hintText: "Nhập tên quán",
-                controller: restaurantNameController,
+                title: "Tên món ăn",
+                hintText: "Nhập tên món ăn",
+                controller: foodNameController,
               ),
               const SizedBox(height: 24,),
               FormFieldWidget(
-                title: "Địa chỉ",
-                hintText: "Nhập địa chỉ quán",
-                controller: addressController,
+                title: "Giá tiền",
+                hintText: "Nhập giá tiền của món ăn",
+                controller: costController,
               ),
               const SizedBox(height: 24,),
-              FormFieldWidget(
-                title: "Định vị địa chỉ quán",
-                hintText: "Toạ độ của quán",
-                controller: locationController,
-                readOnly: true,
-                suffixIcon: InkWell(
-                  onTap: () async {
-                    final position = await LocationService.getCurrentPosition();
-                    if (position == null) {
-                      print("Position null");
-                    } else {
-                      print("Lat: ${position.latitude} --- long:${position.longitude}");
-                      String positionStr = "(${position.latitude}, ${position.longitude})";
-                      locationController.text = positionStr;
-                    }
-                  },
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Icon(Icons.location_on, color: AppColors.whiteColor,),
-                  ),
-                )
-              ),
-              const SizedBox(height: 24,),
+              // FormFieldWidget(
+              //   title: "Định vị địa chỉ quán",
+              //   hintText: "Toạ độ của quán",
+              //   controller: locationController,
+              //   readOnly: true,
+              //   suffixIcon: InkWell(
+              //     onTap: () async {
+              //       final position = await LocationService.getCurrentPosition();
+              //       if (position == null) {
+              //         print("Position null");
+              //       } else {
+              //         print("Lat: ${position.latitude} --- long:${position.longitude}");
+              //         String positionStr = "(${position.latitude}, ${position.longitude})";
+              //         locationController.text = positionStr;
+              //       }
+              //     },
+              //     child: Container(
+              //       width: 36,
+              //       height: 36,
+              //       decoration: BoxDecoration(
+              //         color: AppColors.mainColor,
+              //         borderRadius: BorderRadius.circular(4),
+              //       ),
+              //       child: const Icon(Icons.location_on, color: AppColors.whiteColor,),
+              //     ),
+              //   )
+              // ),
+              // const SizedBox(height: 24,),
               const Text("Danh mục món ăn", style: TextStyle(fontWeight: FontWeight.bold),),
               const SizedBox(height: 8,),
               Center(
@@ -144,7 +142,7 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                 ).toList(),
               ),
               const SizedBox(height: 16,),
-              const Text("Thêm ảnh đại diện của quán", style: TextStyle(fontWeight: FontWeight.bold),),
+              const Text("Thêm ảnh của món ăn", style: TextStyle(fontWeight: FontWeight.bold),),
               const SizedBox(height: 8,),
               Center(
                 child: Stack(
@@ -205,75 +203,75 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                 ),
               ),
               const SizedBox(height: 16,),
-              const Text("Thêm ảnh bìa của quán", style: TextStyle(fontWeight: FontWeight.bold),),
-              const SizedBox(height: 8,),
-              Center(
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: restaurantCoverImage == null
-                        ? Image.asset(
-                            AssetPaths.imagePath.getDefaultLoadingImagePath,
-                            width: 160,
-                            height: 160,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.file(
-                          restaurantCoverImage!,
-                          width: 160,
-                          height: 160,
-                          fit: BoxFit.cover,
-                        ),
-                    ),
-                    Positioned(
-                      top: 60,
-                      left: 60,
-                      child: InkWell(
-                        onTap: () async {
-                          try {
-                            File image = await SelectImage.selectImage();
-                            setState(() {
-                              restaurantCoverImage = image;
-                            });
-                          } on PlatformException catch (e) {
-                            if (e.code ==
-                                'read_external_storage_denied') {
-                              // AppToaster.showToast(
-                              //   context: context,
-                              //   msg: ConstantStrings
-                              //       .appString.needAcceptReadRule,
-                              //   type: AppToasterType.warning,
-                              // );
-                            }
-                          }
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white.withOpacity(0.4),
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: AppColors.whiteColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16,),
-              const Text("Review về quán", style: TextStyle(fontWeight: FontWeight.bold),),
+              // const Text("Thêm ảnh bìa của quán", style: TextStyle(fontWeight: FontWeight.bold),),
+              // const SizedBox(height: 8,),
+              // Center(
+              //   child: Stack(
+              //     children: [
+              //       ClipRRect(
+              //         borderRadius: BorderRadius.circular(12),
+              //         child: restaurantCoverImage == null
+              //           ? Image.asset(
+              //               AssetPaths.imagePath.getDefaultLoadingImagePath,
+              //               width: 160,
+              //               height: 160,
+              //               fit: BoxFit.cover,
+              //             )
+              //           : Image.file(
+              //             restaurantCoverImage!,
+              //             width: 160,
+              //             height: 160,
+              //             fit: BoxFit.cover,
+              //           ),
+              //       ),
+              //       Positioned(
+              //         top: 60,
+              //         left: 60,
+              //         child: InkWell(
+              //           onTap: () async {
+              //             try {
+              //               File image = await SelectImage.selectImage();
+              //               setState(() {
+              //                 restaurantCoverImage = image;
+              //               });
+              //             } on PlatformException catch (e) {
+              //               if (e.code ==
+              //                   'read_external_storage_denied') {
+              //                 // AppToaster.showToast(
+              //                 //   context: context,
+              //                 //   msg: ConstantStrings
+              //                 //       .appString.needAcceptReadRule,
+              //                 //   type: AppToasterType.warning,
+              //                 // );
+              //               }
+              //             }
+              //           },
+              //           child: Container(
+              //             width: 40,
+              //             height: 40,
+              //             decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(20),
+              //               color: Colors.white.withOpacity(0.4),
+              //             ),
+              //             child: const Icon(
+              //               Icons.camera_alt,
+              //               color: AppColors.whiteColor,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 16,),
+              const Text("Review về món ăn", style: TextStyle(fontWeight: FontWeight.bold),),
               const SizedBox(height: 8,),
               TextFormField(
                 scrollPadding: EdgeInsets.all(8),
                 controller: reviewController,
                 maxLines: 5,
                 decoration: InputDecoration(
-                  hintText: "Cảm nhận của bạn về quán",
+                  hintText: "Cảm nhận của bạn về món ăn",
                   hintStyle: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -288,24 +286,6 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                     ),
                   ),
                 )
-              ),
-              const SizedBox(height: 16,),
-              const Text("Review về quán", style: TextStyle(fontWeight: FontWeight.bold),),
-              const SizedBox(height: 16,),
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    NavigationService().pushNamed(ROUTE_REVIEW_FOOD);
-                  },
-                  child: Text(
-                    "Thêm món ăn mới",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                      color: AppColors.mainColor,
-                    ),
-                  ),
-                ),
               ),
               const SizedBox(height: 32,),
               SizedBox(

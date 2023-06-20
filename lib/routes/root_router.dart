@@ -7,6 +7,7 @@ import 'package:hanoi_foodtour/views/home/home_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
 import 'package:hanoi_foodtour/views/restaurant/restaurant_detail.dart';
+import 'package:hanoi_foodtour/views/review/review_food_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_overview_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_restaurant_screen.dart';
 import 'package:hanoi_foodtour/views/splash/splash.dart';
@@ -71,6 +72,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const ReviewRestaurantScreen(),
+      );
+    case ROUTE_REVIEW_FOOD:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const ReviewFoodScreen(),
       );
     default:
       return MaterialPageRoute(

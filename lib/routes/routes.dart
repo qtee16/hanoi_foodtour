@@ -9,3 +9,4 @@ const String ROUTE_RESTAURANT_DETAIL = '/restaurant-detail';
 const String ROUTE_COMMENT = '/comment';
 const String ROUTE_REVIEW_OVERVIEW = '/review-overview';
 const String ROUTE_REVIEW_RESTAURANT = '/review-restaurant';
+const String ROUTE_REVIEW_FOOD = '/review-food';
