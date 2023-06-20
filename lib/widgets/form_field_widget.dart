@@ -20,7 +20,10 @@ class FormFieldWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold),),
+        Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         TextFormField(
           controller: controller,
           readOnly: readOnly,
@@ -34,7 +37,6 @@ class FormFieldWidget extends StatelessWidget {
             ),
             hintText: hintText,
           ),
-          
         ),
       ],
     );

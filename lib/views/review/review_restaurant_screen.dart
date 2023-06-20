@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hanoi_foodtour/constants.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
@@ -29,6 +30,7 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
   List _selectCategories = [];
   File? restaurantAvatar;
   File? restaurantCoverImage;
+  Position? location;
 
   void _showMultiSelect(
     List categories,
@@ -92,6 +94,9 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                       if (position == null) {
                         print("Position null");
                       } else {
+                        setState(() {
+                          location = position;
+                        });
                         print(
                             "Lat: ${position.latitude} --- long:${position.longitude}");
                         String positionStr =
@@ -371,14 +376,30 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                   ),
                   onPressed: () async {
                     if (restaurantAvatar != null) {
-                      final imageEncode =
+                      final avatarEncode =
                           await Utils.encodeImage(restaurantAvatar!);
+                      final coverImageEncode =
+                          await Utils.encodeImage(restaurantCoverImage!);
+                      final restaurantName =
+                          restaurantNameController.text.trim();
+                      final address = addressController.text.trim();
+                      final locationLat = location!.latitude;
+                      final locationLong = location!.longitude;
+                      final review = reviewController.text.trim();
                       final data = {
-                        "name": restaurantAvatar!.path.split('/').last,
-                        "data": imageEncode,
+                        "restaurantName": restaurantName,
+                        "address": address,
+                        "locationLat": locationLat,
+                        "locationLong": locationLong,
+                        "review": review,
+                        "avatarName": restaurantAvatar!.path.split('/').last,
+                        "avatarData": avatarEncode,
+                        "coverImageName":
+                            restaurantCoverImage!.path.split('/').last,
+                        "coverImageData": coverImageEncode,
                       };
                       final response = await Dio().post(
-                        "${Utils.apiUrl}/api/users/upload-image",
+                        "${Utils.apiUrl}/api/review/restaurant",
                         data: data,
                       );
                       final responseData = response.data;
