@@ -23,6 +23,7 @@ class AssetPaths {
 class ImagePath {
   final getDefaultUserImagePath = "assets/images/default_user.png";
   final getDefaultLoadingImagePath = "assets/images/default-loading-image.png";
+  final getLogoImagePath = "assets/icons/logo-app.png";
 }
 
 class IconPath {
@@ -38,4 +39,9 @@ class IconPath {
   final getLikeFillIconPath = "assets/icons/like-fill.png";
   final getDislikeOutlineIconPath = "assets/icons/dislike-outline.png";
   final getDislikeFillIconPath = "assets/icons/dislike-fill.png";
+  final getInfoIconPath = "assets/icons/toast/info_icon.svg";
+  final getWarningIconPath = "assets/icons/toast/warning_icon.svg";
+  final getCheckIconPath = "assets/icons/toast/checked_icon.svg";
+  final getAlertIconPath = "assets/icons/toast/alert_triangle.svg";
+  final getLoadingIconPath = "assets/icons/loading.png";
 }

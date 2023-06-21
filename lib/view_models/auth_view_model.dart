@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/repositories/general_repo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,23 +9,38 @@ import '../models/user.dart';
 class AuthViewModel extends ChangeNotifier {
   final GeneralRepo generalRepo;
 
+  AuthViewModel({required this.generalRepo});
+
   User? _currentUser;
+  String? _token;
 
   User? get currentUser => _currentUser;
 
+  String? get token => _token;
+
   bool get isLogin => _currentUser != null;
 
-  AuthViewModel({required this.generalRepo});
-
-  Future<void> fetchCurrentUser() async {
-    final userMap = await generalRepo.fetchCurrentUser();
-    if (userMap != null) {
-      setCurrentUser(User.fromJson(userMap));
+  Future<void> setTokenFromLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+    var dataEncode = prefs.getString("user_data");
+    if (dataEncode != null) {
+      var userData = json.decode(dataEncode);
+      _token = userData["token"];
+      print(_token);
+      notifyListeners();
     }
   }
 
-  setCurrentUser(User? user) {
+  Future<void> fetchCurrentUser() async {
+    final user = await generalRepo.fetchCurrentUser();
+    if (user != null) {
+      await setCurrentUser(user);
+    }
+  }
+
+  setCurrentUser(User? user) async {
     _currentUser = user;
+    await setTokenFromLocal();
     notifyListeners();
   }
 
@@ -32,29 +49,29 @@ class AuthViewModel extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    final userMap = await generalRepo.signUp(
+    final user = await generalRepo.signUp(
       name: name,
       email: email,
       password: password,
     );
-    setCurrentUser(User.fromJson(userMap));
+    setCurrentUser(user);
   }
 
   Future<void> signIn({
     required String email,
     required String password,
   }) async {
-    final userMap = await generalRepo.signIn(
+    final user = await generalRepo.signIn(
       email: email,
       password: password,
     );
-    print(userMap);
-    setCurrentUser(User.fromJson(userMap));
+    setCurrentUser(user);
   }
 
   Future<void> signOut() async {
-    final refs = await SharedPreferences.getInstance();
-    refs.clear();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    _token = null;
     setCurrentUser(null);
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/custom_animated_fab.dart';
 import 'package:provider/provider.dart';
@@ -73,21 +75,26 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
               },
               child: SingleChildScrollView(
                 controller: scrollController,
-                child: Column(
-                  children: [
-                    CardItem(),
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: AppColors.greyColor,
-                    ),
-                    CardItem(),
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: AppColors.greyColor,
-                    ),
-                  ],
+                child: Consumer<RestaurantViewModel>(
+                  builder: (context, model, child) {
+                    List<Restaurant> reviewedRestaurants =
+                        model.reviewedRestaurants;
+                    return Column(
+                        children: reviewedRestaurants.map((e) {
+                      return Column(
+                        children: [
+                          RestaurantCardItem(
+                            restaurant: e,
+                          ),
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: AppColors.greyColor,
+                          ),
+                        ],
+                      );
+                    }).toList());
+                  },
                 ),
               ),
             ),
@@ -130,10 +137,12 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
   }
 }
 
-class CardItem extends StatelessWidget {
-  const CardItem({
+class RestaurantCardItem extends StatelessWidget {
+  const RestaurantCardItem({
     super.key,
+    required this.restaurant,
   });
+  final Restaurant restaurant;
 
   @override
   Widget build(BuildContext context) {
@@ -148,8 +157,7 @@ class CardItem extends StatelessWidget {
             width: 80,
             height: 80,
             border: 8,
-            imageURL:
-                "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
+            imageURL: restaurant.avatarUrl,
           ),
           const SizedBox(
             width: 16,
@@ -160,8 +168,8 @@ class CardItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Phở Bát Đàn",
-                  style: TextStyle(
+                  restaurant.restaurantName,
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
@@ -181,8 +189,10 @@ class CardItem extends StatelessWidget {
                         const SizedBox(
                           width: 4,
                         ),
-                        const Text(
-                          "4.3 (100 đánh giá)",
+                        Text(
+                          restaurant.rating == 0
+                              ? "Chưa có đánh giá"
+                              : "4.3 (100 đánh giá)",
                           style: TextStyle(fontSize: 12),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -204,8 +214,8 @@ class CardItem extends StatelessWidget {
                         const SizedBox(
                           width: 4,
                         ),
-                        const Text(
-                          "50",
+                        Text(
+                          restaurant.likedUserIdList.length.toString(),
                           style: TextStyle(fontSize: 12),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -227,8 +237,8 @@ class CardItem extends StatelessWidget {
                       width: 4,
                     ),
                     Expanded(
-                      child: const Text(
-                        "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                      child: Text(
+                        restaurant.address,
                         style: TextStyle(fontSize: 12),
                         overflow: TextOverflow.ellipsis,
                       ),

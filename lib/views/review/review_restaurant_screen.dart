@@ -10,7 +10,12 @@ import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/services/location_service.dart';
 import 'package:hanoi_foodtour/services/select_image.dart';
 import 'package:hanoi_foodtour/utils/utils.dart';
+import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
+import 'package:hanoi_foodtour/widgets/custom_loading.dart';
+import 'package:provider/provider.dart';
 
+import '../../view_models/auth_view_model.dart';
+import '../../widgets/app_toaster.dart';
 import '../../widgets/form_field_widget.dart';
 import '../../widgets/multi_select.dart';
 
@@ -52,6 +57,8 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
@@ -387,6 +394,7 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                       final locationLong = location!.longitude;
                       final review = reviewController.text.trim();
                       final data = {
+                        "userId": authViewModel.currentUser!.id,
                         "restaurantName": restaurantName,
                         "address": address,
                         "locationLat": locationLat,
@@ -398,12 +406,23 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                             restaurantCoverImage!.path.split('/').last,
                         "coverImageData": coverImageEncode,
                       };
-                      final response = await Dio().post(
-                        "${Utils.apiUrl}/api/review/restaurant",
-                        data: data,
+                      // ignore: use_build_context_synchronously
+                      showAppLoading(context);
+                      // ignore: use_build_context_synchronously
+                      await context
+                          .read<RestaurantViewModel>()
+                          .createRestaurant(
+                            data,
+                            authViewModel.token,
+                          );
+                      NavigationService().pop();
+                      NavigationService().pop();
+                      // ignore: use_build_context_synchronously
+                      AppToaster.showToast(
+                        context: context,
+                        msg: "Review quán ăn thành công",
+                        type: AppToasterType.success,
                       );
-                      final responseData = response.data;
-                      print(responseData);
                     }
                   },
                   child: const Text(
