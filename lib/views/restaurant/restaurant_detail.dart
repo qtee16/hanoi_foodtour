@@ -5,11 +5,18 @@ import 'package:hanoi_foodtour/widgets/comment_widget.dart';
 import 'package:hanoi_foodtour/widgets/content_container.dart';
 import 'package:hanoi_foodtour/widgets/custom_rating_widget.dart';
 import 'package:hanoi_foodtour/widgets/list_card_item.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/restaurant.dart';
 import '../../routes/navigation_services.dart';
+import '../../view_models/auth_view_model.dart';
 
 class RestaurantDetail extends StatefulWidget {
-  const RestaurantDetail({super.key});
+  const RestaurantDetail({
+    super.key,
+    required this.restaurant,
+  });
+  final Restaurant restaurant;
 
   @override
   State<RestaurantDetail> createState() => _RestaurantDetailState();
@@ -19,6 +26,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width;
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final isLogin = authViewModel.isLogin;
 
     return Scaffold(
       body: SafeArea(
@@ -35,7 +44,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                       left: 0,
                       right: 0,
                       child: Image.network(
-                        "https://owa.bestprice.vn/images/articles/uploads/an-sach-15-quan-pho-ngon-re-o-ha-noi-5f6c02a1e0b66.jpg",
+                        widget.restaurant.coverImageUrl,
                         height: 240,
                         fit: BoxFit.cover,
                       ),
@@ -61,12 +70,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         ),
                       ),
                     ),
-                    const Positioned(
+                    Positioned(
                       top: 124,
                       left: 20,
                       child: CachedImageWidget(
-                        imageURL:
-                            "https://cdn.tgdd.vn/Files/2020/12/31/1317213/top-10-quan-pho-ngon-tru-danh-khap-sai-gon-ma-ban-nen-an-thu-mot-lan-202206031127464521.jpeg",
+                        imageURL: widget.restaurant.avatarUrl,
                         width: 152,
                         height: 152,
                         border: 76,
@@ -110,10 +118,12 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Phở Bát Đàn",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                        Text(
+                          widget.restaurant.restaurantName,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(
                           height: 12,
@@ -131,10 +141,10 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             const SizedBox(
                               width: 4,
                             ),
-                            Container(
+                            SizedBox(
                               width: 300,
-                              child: const Text(
-                                "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                              child: Text(
+                                widget.restaurant.address,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -156,10 +166,12 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             const SizedBox(
                               width: 4,
                             ),
-                            Container(
+                            SizedBox(
                               width: 300,
-                              child: const Text(
-                                "4.3 (100 đánh giá)",
+                              child: Text(
+                                widget.restaurant.rating == 0
+                                    ? "Chưa có đánh giá"
+                                    : "4.3 (100 đánh giá)",
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -181,10 +193,11 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             const SizedBox(
                               width: 4,
                             ),
-                            Container(
+                            SizedBox(
                               width: 300,
-                              child: const Text(
-                                "50",
+                              child: Text(
+                                widget.restaurant.likedUserIdList.length
+                                    .toString(),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -205,20 +218,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         ),
                         Wrap(
                           children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
                             Container(
                               margin:
                                   const EdgeInsets.only(bottom: 4, right: 4),
@@ -286,8 +285,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                         const SizedBox(
                           height: 16,
                         ),
-                        const Text(
-                            "Nước dùng ngọt, đậm vị. Sợi phở dai, ngon. Thịt bò được nấu vừa tái chín, không quá dai. Có 3 option 30.000 - 35.000 - 40.000.")
+                        Text(widget.restaurant.review)
                       ],
                     ),
                   ),
@@ -347,7 +345,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   const SizedBox(
                     width: 8,
                   ),
-                  Text(
+                  const Text(
                     "Yêu thích",
                     style: TextStyle(
                       color: Colors.red,
@@ -374,7 +372,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   const SizedBox(
                     width: 8,
                   ),
-                  Text(
+                  const Text(
                     "Tìm đường",
                     style: TextStyle(
                       color: AppColors.whiteColor,

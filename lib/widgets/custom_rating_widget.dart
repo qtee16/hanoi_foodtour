@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../view_models/auth_view_model.dart';
 
 class CustomRatingWidget extends StatefulWidget {
   const CustomRatingWidget({super.key});
@@ -15,6 +17,9 @@ class _CustomRatingWidgetState extends State<CustomRatingWidget> {
   double _rating = 3;
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final isLogin = authViewModel.isLogin;
+
     return Column(
       children: [
         Row(
@@ -98,35 +103,60 @@ class _CustomRatingWidgetState extends State<CustomRatingWidget> {
         const SizedBox(
           height: 16,
         ),
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith(
-              (states) => AppColors.mainColor,
-            ),
-          ),
-          onPressed: () {},
-          child: const Text(
-            "Đăng nhập để đánh giá",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.whiteColor,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        GFRating(
-          spacing: 20,
-          color: AppColors.yellowColor,
-          borderColor: AppColors.yellowColor,
-          value: _rating,
-          onChanged: (value) {
-            setState(() {
-              _rating = value;
-            });
-          },
-        ),
+        isLogin
+            ? Column(
+                children: [
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  GFRating(
+                    spacing: 20,
+                    color: AppColors.yellowColor,
+                    borderColor: AppColors.yellowColor,
+                    value: _rating,
+                    onChanged: (value) {
+                      setState(() {
+                        _rating = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => AppColors.mainColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      // NavigationService().pushNamed(ROUTE_SIGN_IN);
+                    },
+                    child: const Text(
+                      "Đánh giá",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => AppColors.mainColor,
+                  ),
+                ),
+                onPressed: () {},
+                child: const Text(
+                  "Đăng nhập để đánh giá",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+              ),
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,7 +16,6 @@ import 'package:provider/provider.dart';
 import '../../view_models/auth_view_model.dart';
 import '../../widgets/app_toaster.dart';
 import '../../widgets/form_field_widget.dart';
-import '../../widgets/multi_select.dart';
 
 class ReviewRestaurantScreen extends StatefulWidget {
   const ReviewRestaurantScreen({super.key});
@@ -32,28 +30,9 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
   final locationController = TextEditingController();
   final reviewController = TextEditingController();
 
-  List _selectCategories = [];
   File? restaurantAvatar;
   File? restaurantCoverImage;
   Position? location;
-
-  void _showMultiSelect(
-    List categories,
-  ) async {
-    final results = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return MultiSelect(title: "Chọn danh mục", items: categories);
-      },
-    );
-
-    // Update UI
-    if (results != null) {
-      setState(() {
-        _selectCategories = results;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,63 +107,6 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                 height: 24,
               ),
               const Text(
-                "Danh mục món ăn",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: AppColors.whiteColor,
-                    backgroundColor: AppColors.mainColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  onPressed: () async {
-                    List categories = ["Phở", "Bún", "Mỳ", "Cơm"];
-                    _showMultiSelect(
-                      categories,
-                    );
-                  },
-                  child: const Text(
-                    'Chọn',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Wrap(
-                children: _selectCategories
-                    .map(
-                      (e) => Container(
-                        margin: const EdgeInsets.only(bottom: 4, right: 4),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: AppColors.mainColor,
-                        ),
-                        child: Text(
-                          e,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.whiteColor),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
                 "Thêm ảnh đại diện của quán",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -222,12 +144,11 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                             });
                           } on PlatformException catch (e) {
                             if (e.code == 'read_external_storage_denied') {
-                              // AppToaster.showToast(
-                              //   context: context,
-                              //   msg: ConstantStrings
-                              //       .appString.needAcceptReadRule,
-                              //   type: AppToasterType.warning,
-                              // );
+                              AppToaster.showToast(
+                                context: context,
+                                msg: "Cần cấp quyền truy cập để tiếp tục",
+                                type: AppToasterType.warning,
+                              );
                             }
                           }
                         },
@@ -289,12 +210,11 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                             });
                           } on PlatformException catch (e) {
                             if (e.code == 'read_external_storage_denied') {
-                              // AppToaster.showToast(
-                              //   context: context,
-                              //   msg: ConstantStrings
-                              //       .appString.needAcceptReadRule,
-                              //   type: AppToasterType.warning,
-                              // );
+                              AppToaster.showToast(
+                                context: context,
+                                msg: "Cần cấp quyền truy cập để tiếp tục",
+                                type: AppToasterType.warning,
+                              );
                             }
                           }
                         },
@@ -326,7 +246,7 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                 height: 8,
               ),
               TextFormField(
-                  scrollPadding: EdgeInsets.all(8),
+                  scrollPadding: const EdgeInsets.all(8),
                   controller: reviewController,
                   maxLines: 5,
                   decoration: InputDecoration(
@@ -357,7 +277,7 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                   onTap: () {
                     NavigationService().pushNamed(ROUTE_REVIEW_FOOD);
                   },
-                  child: Text(
+                  child: const Text(
                     "Thêm món ăn mới",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/views/auth/sign_in_screen.dart';
 import 'package:hanoi_foodtour/views/auth/sign_up_screen.dart';
 import 'package:hanoi_foodtour/views/comment/comment_screen.dart';
@@ -54,9 +55,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: const FoodDetailScreen(),
       );
     case ROUTE_RESTAURANT_DETAIL:
+      Restaurant restaurant = arguments["restaurant"];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const RestaurantDetail(),
+        viewToShow: RestaurantDetail(
+          restaurant: restaurant,
+        ),
       );
     case ROUTE_COMMENT:
       return _getPageRoute(

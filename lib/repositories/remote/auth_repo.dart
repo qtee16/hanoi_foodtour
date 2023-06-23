@@ -42,7 +42,10 @@ class AuthRepo {
       return user;
     } catch (e) {
       if (e is DioException) {
+        print(1);
+        print(e.message);
         final responseError = e.response!.data;
+        print(2);
         if (responseError["message"] == "email-incorrect" ||
             responseError["message"] == "password-incorrect") {
           throw EmailOrPasswordIncorrectException();

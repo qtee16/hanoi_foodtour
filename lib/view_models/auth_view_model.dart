@@ -65,7 +65,7 @@ class AuthViewModel extends ChangeNotifier {
       email: email,
       password: password,
     );
-    setCurrentUser(user);
+    await setCurrentUser(user);
   }
 
   Future<void> signOut() async {
