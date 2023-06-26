@@ -22,85 +22,65 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
   final scrollController = ScrollController();
   bool _showFab = true;
 
+  @override
+  void initState() {
+    super.initState();
+    updateMyRestaurant();
+  }
+
+  updateMyRestaurant() async {
+    final token = context.read<AuthViewModel>().token;
+    await context.read<RestaurantViewModel>().fetchAllReviewedRestaurant(token);
+  }
+
   _buildChildWidget() {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-          color: AppColors.whiteColor,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 6,
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: AppColors.greyBackground,
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.search,
-                  color: AppColors.greyText,
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  "Tìm kiếm món ăn hoặc quán",
-                  style: TextStyle(color: AppColors.greyText),
-                )
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Expanded(
-          child: Container(
-            color: AppColors.whiteColor,
-            child: NotificationListener<UserScrollNotification>(
-              onNotification: (notification) {
-                final ScrollDirection direction = notification.direction;
-                setState(() {
-                  if (direction == ScrollDirection.reverse) {
-                    _showFab = false;
-                  } else if (direction == ScrollDirection.forward) {
-                    _showFab = true;
-                  }
-                });
-                return true;
+    return Container(
+      color: AppColors.whiteColor,
+      child: NotificationListener<UserScrollNotification>(
+        onNotification: (notification) {
+          final ScrollDirection direction = notification.direction;
+          setState(() {
+            if (direction == ScrollDirection.reverse) {
+              _showFab = false;
+            } else if (direction == ScrollDirection.forward) {
+              _showFab = true;
+            }
+          });
+          return true;
+        },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            return await () async {
+              await updateMyRestaurant();
+            }();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: scrollController,
+            child: Consumer<RestaurantViewModel>(
+              builder: (context, model, child) {
+                List<Restaurant> reviewedRestaurants =
+                    model.reviewedRestaurants;
+                return Column(
+                    children: reviewedRestaurants.map((e) {
+                  return Column(
+                    children: [
+                      RestaurantCardItem(
+                        restaurant: e,
+                      ),
+                      const Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppColors.greyColor,
+                      ),
+                    ],
+                  );
+                }).toList());
               },
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Consumer<RestaurantViewModel>(
-                  builder: (context, model, child) {
-                    List<Restaurant> reviewedRestaurants =
-                        model.reviewedRestaurants;
-                    return Column(
-                        children: reviewedRestaurants.map((e) {
-                      return Column(
-                        children: [
-                          RestaurantCardItem(
-                            restaurant: e,
-                          ),
-                          const Divider(
-                            height: 1,
-                            thickness: 1,
-                            color: AppColors.greyColor,
-                          ),
-                        ],
-                      );
-                    }).toList());
-                  },
-                ),
-              ),
             ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 
@@ -203,8 +183,8 @@ class RestaurantCardItem extends StatelessWidget {
                           Text(
                             restaurant.rating == 0
                                 ? "Chưa có đánh giá"
-                                : "4.3 (100 đánh giá)",
-                            style: TextStyle(fontSize: 12),
+                                : "${restaurant.rating} (${restaurant.countRatings})",
+                            style: const TextStyle(fontSize: 12),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],

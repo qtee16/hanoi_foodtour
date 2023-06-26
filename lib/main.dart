@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hanoi_foodtour/injection.dart';
 import 'package:hanoi_foodtour/repositories/general_repo.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/food_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,11 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => RestaurantViewModel(
+            generalRepo: getIt<GeneralRepo>(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FoodViewModel(
             generalRepo: getIt<GeneralRepo>(),
           ),
         ),

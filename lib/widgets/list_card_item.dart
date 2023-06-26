@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hanoi_foodtour/models/food.dart';
+import 'package:hanoi_foodtour/models/restaurant.dart';
 
 import '../constants.dart';
 import '../routes/navigation_services.dart';
@@ -9,10 +11,12 @@ class ListCardItem extends StatelessWidget {
   final String title;
   final String subTitle;
   final bool isFoodList;
+  final List data;
   const ListCardItem({
     super.key,
     required this.title,
     required this.subTitle,
+    required this.data,
     this.isFoodList = true,
   });
 
@@ -62,8 +66,11 @@ class ListCardItem extends StatelessWidget {
             width: double.infinity,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 6,
+              itemCount: data.length,
               itemBuilder: (context, index) {
+                final item = isFoodList
+                    ? data[index] as Food
+                    : data[index] as Restaurant;
                 return Row(
                   children: [
                     SizedBox(
@@ -72,10 +79,19 @@ class ListCardItem extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (isFoodList) {
-                          NavigationService().pushNamed(ROUTE_FOOD_DETAIL);
+                          NavigationService().pushNamed(
+                            ROUTE_FOOD_DETAIL,
+                            arguments: {
+                              "food": item,
+                            },
+                          );
                         } else {
-                          NavigationService()
-                              .pushNamed(ROUTE_RESTAURANT_DETAIL);
+                          NavigationService().pushNamed(
+                            ROUTE_RESTAURANT_DETAIL,
+                            arguments: {
+                              "restaurant": item,
+                            },
+                          );
                         }
                       },
                       child: Container(
@@ -83,9 +99,10 @@ class ListCardItem extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CachedImageWidget(
-                              imageURL:
-                                  "https://cdn.pastaxi-manager.onepas.vn/content/uploads/articles/01-Phuong-Mon%20ngon&congthuc/1.%20pho%20ha%20noi/canh-nau-pho-ha-noi-xua-mang-huong-vi-kinh-do-cua-80-nam-ve-truoc-1.jpg",
+                            CachedImageWidget(
+                              imageURL: isFoodList
+                                  ? (item as Food).imageUrl
+                                  : (item as Restaurant).avatarUrl,
                               width: 160,
                               height: 160,
                               border: 8,
@@ -93,9 +110,11 @@ class ListCardItem extends StatelessWidget {
                             const SizedBox(
                               height: 16,
                             ),
-                            const Text(
-                              "Phở bò tái chín",
-                              style: TextStyle(
+                            Text(
+                              isFoodList
+                                  ? (item as Food).foodName
+                                  : (item as Restaurant).restaurantName,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -116,8 +135,8 @@ class ListCardItem extends StatelessWidget {
                                       const SizedBox(
                                         width: 8,
                                       ),
-                                      const Text(
-                                        "35.000VND",
+                                      Text(
+                                        "${(item as Food).price}VND",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
@@ -140,13 +159,25 @@ class ListCardItem extends StatelessWidget {
                                 const SizedBox(
                                   width: 8,
                                 ),
-                                const Text(
-                                  "4.3 (100 đánh giá)",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: AppColors.greyText,
-                                  ),
-                                ),
+                                isFoodList
+                                    ? Text(
+                                        (item as Food).rating == 0
+                                            ? "Chưa có đánh giá"
+                                            : "${item.rating} (${item.countRatings})",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: AppColors.greyText,
+                                        ),
+                                      )
+                                    : Text(
+                                        (item as Restaurant).rating == 0
+                                            ? "Chưa có đánh giá"
+                                            : "${item.rating} (${item.countRatings})",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: AppColors.greyText,
+                                        ),
+                                      ),
                               ],
                             ),
                             SizedBox(
@@ -164,9 +195,9 @@ class ListCardItem extends StatelessWidget {
                                       const SizedBox(
                                         width: 8,
                                       ),
-                                      const Text(
-                                        "50 Tạ Quang Bửu",
-                                        style: TextStyle(
+                                      Text(
+                                        (item as Restaurant).address,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color: AppColors.greyText,
                                         ),
@@ -179,7 +210,7 @@ class ListCardItem extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: index == 5 ? 16 : 0,
+                      width: index == data.length - 1 ? 16 : 0,
                     )
                   ],
                 );

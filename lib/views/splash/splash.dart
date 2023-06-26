@@ -29,8 +29,6 @@ class _SplashState extends State<Splash> {
     checkLogined().then((value) {
       if (value) {
         context.read<AuthViewModel>().fetchCurrentUser().then((value) {
-          final token = context.read<AuthViewModel>().token;
-          context.read<RestaurantViewModel>().fetchAllReviewedRestaurant(token);
           NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
         });
       } else {

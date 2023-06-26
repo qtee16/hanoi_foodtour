@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/repositories/general_repo.dart';
 
+import '../models/food.dart';
+import '../models/rating.dart';
 import '../models/restaurant.dart';
 
 class RestaurantViewModel extends ChangeNotifier {
@@ -27,5 +29,37 @@ class RestaurantViewModel extends ChangeNotifier {
       _reviewedRestaurants = List.from(result);
       notifyListeners();
     }
+  }
+
+  Future<List<Restaurant>> getAllRestaurant() async {
+    return await generalRepo.getAllRestaurant();
+  }
+
+  Future<void> ratingRestaurant(Map<String, dynamic> data, String token) async {
+    await generalRepo.ratingRestaurant(data, token);
+  }
+
+  Future<Rating?> getMyRestaurantRating(
+    String userId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    print("GETTTTT");
+    return await generalRepo.getMyRestaurantRating(userId, data, token);
+  }
+
+  Future<List<Rating>> getAllRestaurantRating(
+    Map<String, dynamic> data,
+  ) async {
+    return await generalRepo.getAllRestaurantRating(data);
+  }
+
+  Future<List<Food>> getAllFoodOfRestaurant(String restaurantId) async {
+    return await generalRepo.getAllFoodOfRestaurant(restaurantId);
+  }
+
+  clearData() {
+    _reviewedRestaurants = [];
+    notifyListeners();
   }
 }

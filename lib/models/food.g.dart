@@ -17,6 +17,7 @@ Food _$FoodFromJson(Map<String, dynamic> json) => Food(
       imageUrl: json['imageUrl'] as String,
       likedUserIdList: json['likedUserIdList'] as List<dynamic>,
       rating: (json['rating'] as num).toDouble(),
+      countRatings: json['countRatings'] as int,
     );
 
 Map<String, dynamic> _$FoodToJson(Food instance) => <String, dynamic>{
@@ -30,4 +31,5 @@ Map<String, dynamic> _$FoodToJson(Food instance) => <String, dynamic>{
       'imageUrl': instance.imageUrl,
       'likedUserIdList': instance.likedUserIdList,
       'rating': instance.rating,
+      'countRatings': instance.countRatings,
     };

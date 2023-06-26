@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/constants.dart';
+import 'package:hanoi_foodtour/routes/routes.dart';
+import 'package:hanoi_foodtour/utils/utils.dart';
+import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/comment_widget.dart';
 import 'package:hanoi_foodtour/widgets/content_container.dart';
@@ -7,9 +10,13 @@ import 'package:hanoi_foodtour/widgets/custom_rating_widget.dart';
 import 'package:hanoi_foodtour/widgets/list_card_item.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/food.dart';
+import '../../models/rating.dart';
 import '../../models/restaurant.dart';
 import '../../routes/navigation_services.dart';
 import '../../view_models/auth_view_model.dart';
+import '../../widgets/app_toaster.dart';
+import '../../widgets/custom_loading.dart';
 
 class RestaurantDetail extends StatefulWidget {
   const RestaurantDetail({
@@ -23,11 +30,101 @@ class RestaurantDetail extends StatefulWidget {
 }
 
 class _RestaurantDetailState extends State<RestaurantDetail> {
+  double? myRating;
+  String? userId;
+  String? token;
+  bool isLogin = false;
+
+  late double rating;
+  late int countRatings;
+  List<Rating> ratings = [];
+  List<int> categories = [];
+  List<Food> foods = [];
+
+  @override
+  void initState() {
+    super.initState();
+    rating = widget.restaurant.rating;
+    countRatings = widget.restaurant.countRatings;
+    updateFood();
+    updateRating();
+
+    final authViewModel = context.read<AuthViewModel>();
+    userId = authViewModel.currentUser?.id;
+    token = authViewModel.token;
+    isLogin = authViewModel.isLogin;
+
+    if (widget.restaurant.rating > 0) {
+      final data = {
+        "restaurantId": widget.restaurant.id,
+      };
+      context
+          .read<RestaurantViewModel>()
+          .getAllRestaurantRating(data)
+          .then((value) {
+        setState(() {
+          ratings = List.from(value);
+        });
+      });
+    }
+
+    if (userId != null && token != null) {
+      final data = {"ratedObjectId": widget.restaurant.id};
+      context
+          .read<RestaurantViewModel>()
+          .getMyRestaurantRating(userId!, data, token!)
+          .then(
+        (rating) {
+          if (rating != null) {
+            setState(() {
+              myRating = rating.rating;
+              print(myRating);
+            });
+          }
+        },
+      );
+    }
+  }
+
+  updateFood() async {
+    final foodList = await context
+        .read<RestaurantViewModel>()
+        .getAllFoodOfRestaurant(widget.restaurant.id);
+    print("FOOD LIST");
+    print(foodList);
+    setState(() {
+      foods = List.from(foodList);
+    });
+    updateCategories();
+  }
+
+  updateCategories() {
+    final categoriesList = foods.map((e) => e.category).toSet().toList();
+    setState(() {
+      categories = List.from(categoriesList);
+    });
+  }
+
+  updateRating() async {
+    final data = {
+      "restaurantId": widget.restaurant.id,
+    };
+    final newRating =
+        await context.read<RestaurantViewModel>().getAllRestaurantRating(data);
+    double sum = 0;
+    newRating.forEach((e) {
+      sum += e.rating;
+    });
+    setState(() {
+      ratings = List.from(newRating);
+      countRatings = ratings.length;
+      rating = sum / countRatings;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width;
-    final authViewModel = Provider.of<AuthViewModel>(context);
-    final isLogin = authViewModel.isLogin;
 
     return Scaffold(
       body: SafeArea(
@@ -43,10 +140,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                       top: 0,
                       left: 0,
                       right: 0,
-                      child: Image.network(
-                        widget.restaurant.coverImageUrl,
+                      child: CachedImageWidget(
+                        imageURL: widget.restaurant.coverImageUrl,
                         height: 240,
-                        fit: BoxFit.cover,
                       ),
                     ),
                     Positioned(
@@ -169,9 +265,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             SizedBox(
                               width: 300,
                               child: Text(
-                                widget.restaurant.rating == 0
+                                widget.restaurant.rating == 0 && ratings.isEmpty
                                     ? "Chưa có đánh giá"
-                                    : "4.3 (100 đánh giá)",
+                                    : "$rating ($countRatings đánh giá)",
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -217,8 +313,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                           height: 8,
                         ),
                         Wrap(
-                          children: [
-                            Container(
+                          children: categories.map((item) {
+                            return Container(
                               margin:
                                   const EdgeInsets.only(bottom: 4, right: 4),
                               padding: const EdgeInsets.symmetric(
@@ -227,40 +323,33 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                                   borderRadius: BorderRadius.circular(16),
                                   color: Colors.orange),
                               child: Text(
-                                "Phở",
+                                Utils.categoriesMap[item].toString(),
                                 style: const TextStyle(
                                     color: AppColors.whiteColor),
                               ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            NavigationService().pushNamed(
+                              ROUTE_REVIEW_FOOD,
+                              arguments: {
+                                "restaurantId": widget.restaurant.id,
+                              },
+                            );
+                          },
+                          child: const Text(
+                            "Review về món ăn của quán",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.mainColor,
+                              decoration: TextDecoration.underline,
                             ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                "Phở",
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            ),
-                          ],
+                          ),
                         )
                       ],
                     ),
@@ -294,16 +383,42 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               const SizedBox(
                 height: 8,
               ),
-              const ListCardItem(
-                title: "Menu của quán",
-                subTitle: "Khám phá các món ăn đa dạng",
-              ),
+              // const ListCardItem(
+              //   title: "Menu của quán",
+              //   subTitle: "Khám phá các món ăn đa dạng",
+              // ),
               const SizedBox(
                 height: 8,
               ),
-              const ContentContainer(
+              ContentContainer(
                 title: "Đánh giá",
-                contentWidget: CustomRatingWidget(),
+                contentWidget: CustomRatingWidget(
+                  currentRating: rating,
+                  countRating: countRatings,
+                  myRating: myRating,
+                  ratings: ratings,
+                  onRating: (rating) async {
+                    if (rating != myRating && rating != 0) {
+                      final data = {
+                        "userId": userId,
+                        "restaurantId": widget.restaurant.id,
+                        "rating": rating,
+                      };
+                      showAppLoading(context);
+                      await context
+                          .read<RestaurantViewModel>()
+                          .ratingRestaurant(data, token!);
+                      updateRating();
+                      NavigationService().pop();
+                      // ignore: use_build_context_synchronously
+                      AppToaster.showToast(
+                        context: context,
+                        msg: "Đánh giá thành công",
+                        type: AppToasterType.success,
+                      );
+                    }
+                  },
+                ),
               ),
               const SizedBox(
                 height: 8,

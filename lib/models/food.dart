@@ -14,6 +14,7 @@ class Food {
   final String imageUrl;
   final List<dynamic> likedUserIdList;
   final double rating;
+  final int countRatings;
 
   const Food({
     required this.id,
@@ -26,6 +27,7 @@ class Food {
     required this.imageUrl,
     required this.likedUserIdList,
     required this.rating,
+    required this.countRatings,
   });
 
   factory Food.fromJson(Map<String, dynamic> data) => _$FoodFromJson(data);

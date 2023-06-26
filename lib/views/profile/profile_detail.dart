@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:provider/provider.dart';
 
 class ProfileDetail extends StatefulWidget {
@@ -25,6 +26,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
           child: ElevatedButton(
         onPressed: () async {
           await context.read<AuthViewModel>().signOut();
+          // ignore: use_build_context_synchronously
+          context.read<RestaurantViewModel>().clearData();
           NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
         },
         child: Text("Sign out"),

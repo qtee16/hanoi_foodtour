@@ -115,9 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         context.read<AuthViewModel>().token;
                                     // ignore: use_build_context_synchronously
                                     print("Token: $token");
-                                    await context
-                                        .read<RestaurantViewModel>()
-                                        .fetchAllReviewedRestaurant(token);
+
                                     NavigationService().pop();
                                     NavigationService()
                                         .pushNameAndRemoveUntil(ROUTE_HOME);

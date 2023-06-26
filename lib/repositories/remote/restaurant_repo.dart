@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:hanoi_foodtour/models/food.dart';
 import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,6 @@ class RestaurantRepo {
       ),
     );
     final responseData = response.data;
-    print(responseData);
     final restaurant = Restaurant.fromJson(responseData["data"]);
     return restaurant;
   }
@@ -57,22 +57,43 @@ class RestaurantRepo {
         final restaurant = Restaurant.fromJson(e);
         return restaurant;
       }).toList();
-      print(result);
       return result;
-      // final responseData = response.data;
-      // if (responseData["success"] == true) {
-      //   final data = responseData["data"];
-      //   final currentUserMap = {
-      //     "id": data["_id"],
-      //     "username": data["username"],
-      //     "email": data["email"],
-      //     "avatarUrl": data["avatarUrl"],
-      //   };
-      //   final user = User.fromJson(currentUserMap);
-      //   return user;
-      // } else {
-      //   return null;
-      // }
     }
+  }
+
+  Future<List<Restaurant>> getAllRestaurant() async {
+    final response = await Dio().get(
+      "${Utils.apiUrl}/api/restaurant",
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    List<dynamic> responseData = response.data["data"];
+    final result = responseData.map((e) {
+      final restaurant = Restaurant.fromJson(e);
+      return restaurant;
+    }).toList();
+    return result;
+  }
+
+  Future<List<Food>> getAllFoodOfRestaurant(String restaurantId) async {
+    final response = await Dio().get(
+      "${Utils.apiUrl}/api/restaurant/$restaurantId/foods",
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    List<dynamic> responseData = response.data["data"];
+    final result = responseData.map((e) {
+      final restaurant = Food.fromJson(e);
+      return restaurant;
+    }).toList();
+    return result;
   }
 }

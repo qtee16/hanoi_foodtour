@@ -4,12 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hanoi_foodtour/constants.dart';
 import 'package:hanoi_foodtour/services/select_image.dart';
+import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/food_view_model.dart';
+import 'package:provider/provider.dart';
 
+import '../../routes/navigation_services.dart';
+import '../../utils/utils.dart';
+import '../../widgets/app_toaster.dart';
+import '../../widgets/custom_dropdown.dart';
+import '../../widgets/custom_loading.dart';
 import '../../widgets/form_field_widget.dart';
 import '../../widgets/multi_select.dart';
 
 class ReviewFoodScreen extends StatefulWidget {
-  const ReviewFoodScreen({super.key});
+  final String restaurantId;
+  const ReviewFoodScreen({super.key, required this.restaurantId});
 
   @override
   State<ReviewFoodScreen> createState() => _ReviewFoodScreenState();
@@ -17,34 +26,18 @@ class ReviewFoodScreen extends StatefulWidget {
 
 class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
   final foodNameController = TextEditingController();
-  final costController = TextEditingController();
-  final locationController = TextEditingController();
+  final priceController = TextEditingController();
   final reviewController = TextEditingController();
 
-  List _selectCategories = [];
-  File? restaurantAvatar;
-  File? restaurantCoverImage;
+  List<int> categories = [1, 2, 3, 4, 5, 6];
+  int? selectCategory;
 
-  void _showMultiSelect(
-    List categories,
-  ) async {
-    final results = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return MultiSelect(title: "Chọn danh mục", items: categories);
-      },
-    );
-
-    // Update UI
-    if (results != null) {
-      setState(() {
-        _selectCategories = results;
-      });
-    }
-  }
+  File? foodImage;
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = context.read<AuthViewModel>();
+
     return Scaffold(
         backgroundColor: AppColors.whiteColor,
         appBar: AppBar(
@@ -70,7 +63,8 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                 FormFieldWidget(
                   title: "Giá tiền",
                   hintText: "Nhập giá tiền của món ăn",
-                  controller: costController,
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(
                   height: 24,
@@ -82,52 +76,36 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.whiteColor,
-                      backgroundColor: AppColors.mainColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    onPressed: () async {
-                      List categories = ["Phở", "Bún", "Mỳ", "Cơm"];
-                      _showMultiSelect(
-                        categories,
-                      );
-                    },
-                    child: const Text(
-                      'Chọn',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Wrap(
-                  children: _selectCategories
-                      .map(
-                        (e) => Container(
-                          margin: const EdgeInsets.only(bottom: 4, right: 4),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: AppColors.mainColor,
-                          ),
-                          child: Text(
-                            e,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.whiteColor),
-                          ),
-                        ),
-                      )
+                CustomDropdown<int>(
+                  buttonHeight: 48,
+                  buttonWidth: double.infinity,
+                  dropdownWidth: MediaQuery.of(context).size.width - 32,
+                  hint: 'Chọn danh mục món ăn',
+                  valueAlignment: Alignment.center,
+                  dropdownItems: categories,
+                  value: selectCategory,
+                  onChanged: (dynamic value) {
+                    setState(() {
+                      selectCategory = value;
+                    });
+                  },
+                  items: categories
+                      .map((item) => DropdownMenuItem<int>(
+                            value: item,
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                Utils.categoriesMap[item].toString(),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ))
                       .toList(),
+                  itemHeight: 48,
                 ),
                 const SizedBox(
                   height: 16,
@@ -144,7 +122,7 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: restaurantAvatar == null
+                        child: foodImage == null
                             ? Image.asset(
                                 AssetPaths.imagePath.getDefaultLoadingImagePath,
                                 width: 160,
@@ -152,7 +130,7 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                                 fit: BoxFit.cover,
                               )
                             : Image.file(
-                                restaurantAvatar!,
+                                foodImage!,
                                 width: 160,
                                 height: 160,
                                 fit: BoxFit.cover,
@@ -166,7 +144,7 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                             try {
                               File image = await SelectImage.selectImage();
                               setState(() {
-                                restaurantAvatar = image;
+                                foodImage = image;
                               });
                             } on PlatformException catch (e) {
                               if (e.code == 'read_external_storage_denied') {
@@ -300,7 +278,39 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      if (foodImage != null) {
+                        final imageEncode = await Utils.encodeImage(foodImage!);
+                        final foodName = foodNameController.text.trim();
+                        final price = priceController.text.trim();
+                        final review = reviewController.text.trim();
+                        final data = {
+                          "userId": authViewModel.currentUser!.id,
+                          "restaurantId": widget.restaurantId,
+                          "foodName": foodName,
+                          "category": selectCategory,
+                          "review": review,
+                          "imageName": foodImage!.path.split('/').last,
+                          "imageData": imageEncode,
+                          "price": price,
+                        };
+                        // ignore: use_build_context_synchronously
+                        showAppLoading(context);
+                        // ignore: use_build_context_synchronously
+                        await context.read<FoodViewModel>().createFood(
+                              data,
+                              authViewModel.token,
+                            );
+                        NavigationService().pop();
+                        NavigationService().pop();
+                        // ignore: use_build_context_synchronously
+                        AppToaster.showToast(
+                          context: context,
+                          msg: "Review món ăn thành công",
+                          type: AppToasterType.success,
+                        );
+                      }
+                    },
                     child: const Text(
                       'Review',
                       style: TextStyle(
