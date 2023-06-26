@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../view_models/auth_view_model.dart';
 
 class CommentWidget extends StatefulWidget {
   const CommentWidget({super.key});
@@ -25,69 +27,118 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    final isLogin = authViewModel.isLogin;
+
     return Column(
       children: [
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith(
-              (states) => AppColors.mainColor,
-            ),
-          ),
-          onPressed: () {},
-          child: const Text(
-            "Đăng nhập để bình luận",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.whiteColor,
-            ),
-          ),
+        isLogin
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextFormField(
+                    controller: commentController,
+                    focusNode: _focusNode,
+                    minLines: 3,
+                    maxLines: 5,
+                    textInputAction: TextInputAction.done,
+                    onEditingComplete: () {
+                      _focusNode.unfocus();
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Viết bình luận",
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        color: AppColors.greyText,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: AppColors.greyBorder),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => AppColors.mainColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      // NavigationService().pushNamed(ROUTE_SIGN_IN);
+                    },
+                    child: const Text(
+                      "Gửi",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => AppColors.mainColor,
+                  ),
+                ),
+                onPressed: () {
+                  NavigationService().pushNamed(ROUTE_SIGN_IN);
+                },
+                child: const Text(
+                  "Đăng nhập để bình luận",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+              ),
+        const SizedBox(
+          height: 32,
+        ),
+        Divider(
+          height: 0.5,
+          thickness: 0.5,
+          color: AppColors.greyBorder,
+        ),
+        CommentItem(),
+        Divider(
+          height: 0.5,
+          thickness: 0.5,
+          color: AppColors.greyBorder,
+        ),
+        CommentItem(),
+        Divider(
+          height: 0.5,
+          thickness: 0.5,
+          color: AppColors.greyBorder,
+        ),
+        CommentItem(),
+        Divider(
+          height: 0.5,
+          thickness: 0.5,
+          color: AppColors.greyBorder,
         ),
         const SizedBox(
           height: 16,
         ),
-        TextFormField(
-          controller: commentController,
-          focusNode: _focusNode,
-          minLines: 3,
-          maxLines: 5,
-          textInputAction: TextInputAction.done,
-          onEditingComplete: () {
-            _focusNode.unfocus();
-          },
-          decoration: InputDecoration(
-            hintText: "Viết bình luận",
-            hintStyle: TextStyle(
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-              color: AppColors.greyText,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.greyBorder),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 32,
-        ),
-        Divider(height: 0.5, thickness: 0.5, color: AppColors.greyBorder,),
-        CommentItem(),
-        Divider(height: 0.5, thickness: 0.5, color: AppColors.greyBorder,),
-        CommentItem(),
-        Divider(height: 0.5, thickness: 0.5, color: AppColors.greyBorder,),
-        CommentItem(),
-        Divider(height: 0.5, thickness: 0.5, color: AppColors.greyBorder,),
-        const SizedBox(height: 16,),
         TextButton(
           onPressed: () {
             NavigationService().pushNamed(ROUTE_COMMENT);
-          }, 
+          },
           child: Text(
-            "Xem tất cả bình luận", 
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,),
+            "Xem tất cả bình luận",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
@@ -146,7 +197,7 @@ class CommentItem extends StatelessWidget {
                 children: [
                   Text(
                     "15",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 14),
                   ),
                   const SizedBox(
                     width: 4,
@@ -157,7 +208,7 @@ class CommentItem extends StatelessWidget {
                     },
                     child: Image.asset(
                       AssetPaths.iconPath.getLikeFillIconPath,
-                      width: 20,
+                      width: 14,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -166,7 +217,7 @@ class CommentItem extends StatelessWidget {
                   ),
                   Text(
                     "15",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 14),
                   ),
                   const SizedBox(
                     width: 4,
@@ -177,7 +228,7 @@ class CommentItem extends StatelessWidget {
                     },
                     child: Image.asset(
                       AssetPaths.iconPath.getDislikeFillIconPath,
-                      width: 20,
+                      width: 14,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -185,8 +236,13 @@ class CommentItem extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 12,),
-          Text("Món ăn này rất ngonn.", style: TextStyle(fontSize: 16),),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            "Món ăn này rất ngonn.",
+            style: TextStyle(fontSize: 14),
+          ),
         ],
       ),
     );

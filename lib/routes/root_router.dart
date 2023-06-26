@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hanoi_foodtour/models/food.dart';
+import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/views/auth/sign_in_screen.dart';
 import 'package:hanoi_foodtour/views/auth/sign_up_screen.dart';
 import 'package:hanoi_foodtour/views/comment/comment_screen.dart';
@@ -7,6 +9,7 @@ import 'package:hanoi_foodtour/views/home/home_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
 import 'package:hanoi_foodtour/views/restaurant/restaurant_detail.dart';
+import 'package:hanoi_foodtour/views/review/review_food_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_overview_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_restaurant_screen.dart';
 import 'package:hanoi_foodtour/views/splash/splash.dart';
@@ -48,14 +51,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: const ProfileDetail(),
       );
     case ROUTE_FOOD_DETAIL:
+      Food food = arguments["food"];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const FoodDetailScreen(),
+        viewToShow: FoodDetailScreen(
+          food: food,
+        ),
       );
     case ROUTE_RESTAURANT_DETAIL:
+      Restaurant restaurant = arguments["restaurant"];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const RestaurantDetail(),
+        viewToShow: RestaurantDetail(
+          restaurant: restaurant,
+        ),
       );
     case ROUTE_COMMENT:
       return _getPageRoute(
@@ -71,6 +80,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const ReviewRestaurantScreen(),
+      );
+    case ROUTE_REVIEW_FOOD:
+      String restaurantId = arguments["restaurantId"];
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: ReviewFoodScreen(
+          restaurantId: restaurantId,
+        ),
       );
     default:
       return MaterialPageRoute(

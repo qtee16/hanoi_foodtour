@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,8 +28,9 @@ class _SplashState extends State<Splash> {
     super.initState();
     checkLogined().then((value) {
       if (value) {
-        context.read<AuthViewModel>().fetchCurrentUser().then(
-            (value) => NavigationService().pushNameAndRemoveUntil(ROUTE_HOME));
+        context.read<AuthViewModel>().fetchCurrentUser().then((value) {
+          NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
+        });
       } else {
         NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
       }
