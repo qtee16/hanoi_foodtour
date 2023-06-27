@@ -30,7 +30,7 @@ class RestaurantRepo {
     return restaurant;
   }
 
-  Future<List<Restaurant>?> fetchAllReviewedRestaurant(String? token) async {
+  Future<List<Restaurant>?> getAllReviewedRestaurant(String? token) async {
     final refs = await SharedPreferences.getInstance();
     final encodeData = refs.getString("user_data");
     if (encodeData == null) {
@@ -77,6 +77,21 @@ class RestaurantRepo {
       return restaurant;
     }).toList();
     return result;
+  }
+
+  Future<Restaurant> getRestaurantById(String restaurantId) async {
+    final response = await Dio().get(
+      "${Utils.apiUrl}/api/restaurant/$restaurantId",
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    final responseData = response.data;
+    Restaurant restaurant = Restaurant.fromJson(responseData["data"]);
+    return restaurant;
   }
 
   Future<List<Food>> getAllFoodOfRestaurant(String restaurantId) async {

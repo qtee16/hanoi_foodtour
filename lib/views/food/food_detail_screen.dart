@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/models/food.dart';
+import 'package:hanoi_foodtour/models/restaurant.dart';
+import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/food_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +9,7 @@ import '../../constants.dart';
 import '../../models/rating.dart';
 import '../../routes/navigation_services.dart';
 import '../../view_models/auth_view_model.dart';
+import '../../view_models/restaurant_view_model.dart';
 import '../../widgets/app_toaster.dart';
 import '../../widgets/cached_image_widget.dart';
 import '../../widgets/comment_widget.dart';
@@ -33,13 +36,17 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   late double rating;
   late int countRatings;
   List<Rating> ratings = [];
+  List<Food> otherFoods = [];
+  Restaurant? restaurant;
 
   @override
   void initState() {
     super.initState();
     rating = widget.food.rating;
     countRatings = widget.food.countRatings;
+    getRestaurant();
     updateRating();
+    updateFood();
 
     final authViewModel = context.read<AuthViewModel>();
     userId = authViewModel.currentUser?.id;
@@ -61,17 +68,31 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       final data = {"ratedObjectId": widget.food.id};
       context.read<FoodViewModel>().getMyFoodRating(userId!, data, token!).then(
         (rating) {
-          print("MY RATING");
-          print(rating);
           if (rating != null) {
             setState(() {
               myRating = rating.rating;
-              print(myRating);
             });
           }
         },
       );
     }
+  }
+
+  getRestaurant() async {
+    final _restaurant = await context.read<RestaurantViewModel>().getRestaurantById(widget.food.restaurantId);
+    setState(() {
+      restaurant = _restaurant;
+    });
+  }
+
+  updateFood() async {
+    final foodList = await context
+        .read<RestaurantViewModel>()
+        .getAllFoodOfRestaurant(widget.food.restaurantId);
+    foodList.removeWhere((element) => element.id == widget.food.id,);
+    setState(() {
+      otherFoods = List.from(foodList);
+    });
   }
 
   updateRating() async {
@@ -140,7 +161,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                               spreadRadius: 2,
                               blurRadius: 7,
                               offset:
-                                  Offset(0, 3), // changes position of shadow
+                                  const Offset(0, 3), // changes position of shadow
                             ),
                           ],
                         ),
@@ -149,7 +170,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           children: [
                             Text(
                               widget.food.foodName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -159,7 +180,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             ),
                             Text(
                               "${widget.food.price} VND",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -231,8 +252,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                                   width: 4,
                                 ),
                                 Expanded(
-                                  child: const Text(
-                                    "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
+                                  child: Text(
+                                    restaurant?.address ?? "",
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -268,177 +289,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   padding: const EdgeInsets.only(
-                  //     top: 16,
-                  //     left: 16,
-                  //     right: 16,
-                  //     bottom: 16,
-                  //   ),
-                  //   width: MediaQuery.of(context).size.width,
-                  //   color: AppColors.whiteColor,
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       const Text(
-                  //         "Phở Bát Đàn",
-                  //         style: TextStyle(
-                  //             fontSize: 24, fontWeight: FontWeight.bold),
-                  //       ),
-                  //       const SizedBox(
-                  //         height: 12,
-                  //       ),
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.start,
-                  //         children: [
-                  //           Image.asset(
-                  //             AssetPaths.iconPath.getLocationIconPath,
-                  //             width: 20,
-                  //             height: 20,
-                  //             fit: BoxFit.cover,
-                  //             filterQuality: FilterQuality.high,
-                  //           ),
-                  //           const SizedBox(
-                  //             width: 4,
-                  //           ),
-                  //           Container(
-                  //             width: 300,
-                  //             child: const Text(
-                  //               "Ngõ 50 Tạ Quang Bửu, Hai Bà Trưng",
-                  //               overflow: TextOverflow.ellipsis,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       const SizedBox(
-                  //         height: 8,
-                  //       ),
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.start,
-                  //         children: [
-                  //           Image.asset(
-                  //             AssetPaths.iconPath.getStarIconPath,
-                  //             width: 20,
-                  //             height: 20,
-                  //             fit: BoxFit.cover,
-                  //             filterQuality: FilterQuality.high,
-                  //           ),
-                  //           const SizedBox(
-                  //             width: 4,
-                  //           ),
-                  //           Container(
-                  //             width: 300,
-                  //             child: const Text(
-                  //               "4.3 (100 đánh giá)",
-                  //               overflow: TextOverflow.ellipsis,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       const SizedBox(
-                  //         height: 8,
-                  //       ),
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.start,
-                  //         children: [
-                  //           Image.asset(
-                  //             AssetPaths.iconPath.getHeartIconPath,
-                  //             width: 20,
-                  //             height: 20,
-                  //             fit: BoxFit.cover,
-                  //             filterQuality: FilterQuality.high,
-                  //           ),
-                  //           const SizedBox(
-                  //             width: 4,
-                  //           ),
-                  //           Container(
-                  //             width: 300,
-                  //             child: const Text(
-                  //               "50",
-                  //               overflow: TextOverflow.ellipsis,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       const SizedBox(
-                  //         height: 16,
-                  //       ),
-                  //       const Text(
-                  //         "Danh mục món ăn",
-                  //         style: TextStyle(
-                  //           fontSize: 20,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //       const SizedBox(
-                  //         height: 8,
-                  //       ),
-                  //       Wrap(
-                  //         children: [
-                  //           Container(
-                  //             margin:
-                  //                 const EdgeInsets.only(bottom: 4, right: 4),
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 12, vertical: 8),
-                  //             decoration: BoxDecoration(
-                  //                 borderRadius: BorderRadius.circular(16),
-                  //                 color: Colors.orange),
-                  //             child: Text(
-                  //               "Phở",
-                  //               style: const TextStyle(
-                  //                   color: AppColors.whiteColor),
-                  //             ),
-                  //           ),
-                  //           Container(
-                  //             margin:
-                  //                 const EdgeInsets.only(bottom: 4, right: 4),
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 12, vertical: 8),
-                  //             decoration: BoxDecoration(
-                  //                 borderRadius: BorderRadius.circular(16),
-                  //                 color: Colors.orange),
-                  //             child: Text(
-                  //               "Phở",
-                  //               style: const TextStyle(
-                  //                   color: AppColors.whiteColor),
-                  //             ),
-                  //           ),
-                  //           Container(
-                  //             margin:
-                  //                 const EdgeInsets.only(bottom: 4, right: 4),
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 12, vertical: 8),
-                  //             decoration: BoxDecoration(
-                  //                 borderRadius: BorderRadius.circular(16),
-                  //                 color: Colors.orange),
-                  //             child: Text(
-                  //               "Phở",
-                  //               style: const TextStyle(
-                  //                   color: AppColors.whiteColor),
-                  //             ),
-                  //           ),
-                  //           Container(
-                  //             margin:
-                  //                 const EdgeInsets.only(bottom: 4, right: 4),
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 12, vertical: 8),
-                  //             decoration: BoxDecoration(
-                  //                 borderRadius: BorderRadius.circular(16),
-                  //                 color: Colors.orange),
-                  //             child: Text(
-                  //               "Phở",
-                  //               style: const TextStyle(
-                  //                   color: AppColors.whiteColor),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 8,
-                  // ),
                   Container(
                     padding: const EdgeInsets.all(16),
                     width: MediaQuery.of(context).size.width,
@@ -456,7 +306,26 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        Text(widget.food.review)
+                        Text(widget.food.review),
+                        const SizedBox(height: 16,),
+                        InkWell(
+                          onTap: () {
+                            if (restaurant != null) {
+                              NavigationService().pushNamed(ROUTE_RESTAURANT_DETAIL, arguments: {
+                                "restaurant": restaurant,
+                              });
+                            }
+                          },
+                          child: const Text(
+                            "Đi đến quán",
+                            style: TextStyle(
+                              color: AppColors.mainColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -465,10 +334,13 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               const SizedBox(
                 height: 8,
               ),
-              // const ListCardItem(
-              //   title: "Những món ăn khác của quán",
-              //   subTitle: "Khám phá các món ăn đa dạng",
-              // ),
+              otherFoods.isNotEmpty
+                ? ListCardItem(
+                  title: "Những món ăn khác của quán",
+                  subTitle: "Khám phá các món ăn đa dạng",
+                  data: otherFoods,
+                )
+                : const SizedBox(),
               const SizedBox(
                 height: 8,
               ),
@@ -542,7 +414,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   const SizedBox(
                     width: 8,
                   ),
-                  Text(
+                  const Text(
                     "Yêu thích",
                     style: TextStyle(
                       color: Colors.red,
@@ -569,7 +441,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   const SizedBox(
                     width: 8,
                   ),
-                  Text(
+                  const Text(
                     "Tìm đường",
                     style: TextStyle(
                       color: AppColors.whiteColor,

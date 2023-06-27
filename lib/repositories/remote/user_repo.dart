@@ -16,7 +16,17 @@ class UserRepo {
     } else {
       final userData = json.decode(encodeData);
       final userId = userData["user_id"];
-      final response = await Dio().get("${Utils.apiUrl}/api/users/$userId");
+      final token = userData["token"];
+      final response = await Dio().get(
+        "${Utils.apiUrl}/api/users/$userId", 
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
       final responseData = response.data;
       if (responseData["success"] == true) {
         final data = responseData["data"];

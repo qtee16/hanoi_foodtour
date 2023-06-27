@@ -14,7 +14,6 @@ import '../../widgets/app_toaster.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_loading.dart';
 import '../../widgets/form_field_widget.dart';
-import '../../widgets/multi_select.dart';
 
 class ReviewFoodScreen extends StatefulWidget {
   final String restaurantId;

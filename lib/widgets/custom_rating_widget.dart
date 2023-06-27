@@ -9,6 +9,7 @@ import '../routes/navigation_services.dart';
 import '../routes/routes.dart';
 import '../view_models/auth_view_model.dart';
 
+// ignore: must_be_immutable
 class CustomRatingWidget extends StatefulWidget {
   final double currentRating;
   final int countRating;

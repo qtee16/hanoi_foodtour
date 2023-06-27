@@ -5,11 +5,11 @@ import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
-import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/custom_animated_fab.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
+import '../../widgets/restaurant_card_item.dart';
 
 class ReviewOverviewScreen extends StatefulWidget {
   const ReviewOverviewScreen({super.key});
@@ -30,7 +30,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
 
   updateMyRestaurant() async {
     final token = context.read<AuthViewModel>().token;
-    await context.read<RestaurantViewModel>().fetchAllReviewedRestaurant(token);
+    await context.read<RestaurantViewModel>().getAllReviewedRestaurant(token);
   }
 
   _buildChildWidget() {
@@ -115,133 +115,6 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
               },
             )
           : null,
-    );
-  }
-}
-
-class RestaurantCardItem extends StatelessWidget {
-  const RestaurantCardItem({
-    super.key,
-    required this.restaurant,
-  });
-  final Restaurant restaurant;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        NavigationService().pushNamed(
-          ROUTE_RESTAURANT_DETAIL,
-          arguments: {
-            "restaurant": restaurant,
-          },
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        width: double.infinity,
-        height: 100,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CachedImageWidget(
-              width: 80,
-              height: 80,
-              border: 8,
-              imageURL: restaurant.avatarUrl,
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    restaurant.restaurantName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            AssetPaths.iconPath.getStarIconPath,
-                            width: 14,
-                            height: 14,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.high,
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            restaurant.rating == 0
-                                ? "Chưa có đánh giá"
-                                : "${restaurant.rating} (${restaurant.countRatings})",
-                            style: const TextStyle(fontSize: 12),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            AssetPaths.iconPath.getHeartIconPath,
-                            width: 14,
-                            height: 14,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.high,
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            restaurant.likedUserIdList.length.toString(),
-                            style: TextStyle(fontSize: 12),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        AssetPaths.iconPath.getLocationIconPath,
-                        width: 14,
-                        height: 14,
-                        fit: BoxFit.cover,
-                        filterQuality: FilterQuality.high,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Expanded(
-                        child: Text(
-                          restaurant.address,
-                          style: TextStyle(fontSize: 12),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

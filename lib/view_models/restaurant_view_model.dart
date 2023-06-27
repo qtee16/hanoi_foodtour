@@ -23,8 +23,8 @@ class RestaurantViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAllReviewedRestaurant(String? token) async {
-    final result = await generalRepo.fetchAllReviewedRestaurant(token);
+  Future<void> getAllReviewedRestaurant(String? token) async {
+    final result = await generalRepo.getAllReviewedRestaurant(token);
     if (result != null) {
       _reviewedRestaurants = List.from(result);
       notifyListeners();
@@ -44,7 +44,6 @@ class RestaurantViewModel extends ChangeNotifier {
     Map<String, dynamic> data,
     String token,
   ) async {
-    print("GETTTTT");
     return await generalRepo.getMyRestaurantRating(userId, data, token);
   }
 
@@ -52,6 +51,10 @@ class RestaurantViewModel extends ChangeNotifier {
     Map<String, dynamic> data,
   ) async {
     return await generalRepo.getAllRestaurantRating(data);
+  }
+
+  Future<Restaurant> getRestaurantById(String restaurantId) async {
+    return await generalRepo.getRestaurantById(restaurantId);
   }
 
   Future<List<Food>> getAllFoodOfRestaurant(String restaurantId) async {

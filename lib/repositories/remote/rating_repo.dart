@@ -7,7 +7,7 @@ import '../../utils/utils.dart';
 @singleton
 class RatingRepo {
   Future<void> ratingRestaurant(Map<String, dynamic> data, String token) async {
-    final response = await Dio().post(
+    await Dio().post(
       "${Utils.apiUrl}/api/rating/restaurant",
       data: data,
       options: Options(
@@ -18,9 +18,6 @@ class RatingRepo {
         },
       ),
     );
-
-    final responseData = response.data;
-    print(responseData);
   }
 
   Future<Rating?> getMyRestaurantRating(
@@ -28,7 +25,6 @@ class RatingRepo {
     Map<String, dynamic> data,
     String token,
   ) async {
-    print("LOG2222");
     final response = await Dio().get(
       "${Utils.apiUrl}/api/rating/restaurant/$userId",
       data: data,
@@ -40,11 +36,9 @@ class RatingRepo {
         },
       ),
     );
-    print("LOG3333");
     final responseData = response.data;
     if (responseData["data"] != null) {
       final myRating = Rating.fromJson(responseData["data"]);
-      print(responseData["data"]);
       return myRating;
     }
     return null;
@@ -64,16 +58,13 @@ class RatingRepo {
     final responseData = response.data;
     List result = responseData["data"];
     final ratingList = result.map((rating) {
-      print(rating);
       return Rating.fromJson(rating);
     }).toList();
-    print(ratingList);
-
     return ratingList;
   }
 
   Future<void> ratingFood(Map<String, dynamic> data, String token) async {
-    final response = await Dio().post(
+    await Dio().post(
       "${Utils.apiUrl}/api/rating/food",
       data: data,
       options: Options(
@@ -84,9 +75,6 @@ class RatingRepo {
         },
       ),
     );
-
-    final responseData = response.data;
-    print(responseData);
   }
 
   Future<Rating?> getMyFoodRating(
@@ -94,7 +82,6 @@ class RatingRepo {
     Map<String, dynamic> data,
     String token,
   ) async {
-    print("LOG2222");
     final response = await Dio().get(
       "${Utils.apiUrl}/api/rating/food/$userId",
       data: data,
@@ -106,11 +93,8 @@ class RatingRepo {
         },
       ),
     );
-    print("LOG3333");
     final responseData = response.data;
-    print(responseData);
     if (responseData["data"] != null) {
-      print(responseData["data"]);
       final myRating = Rating.fromJson(responseData["data"]);
       return myRating;
     }
@@ -131,11 +115,8 @@ class RatingRepo {
     final responseData = response.data;
     List result = responseData["data"];
     final ratingList = result.map((rating) {
-      print(rating);
       return Rating.fromJson(rating);
     }).toList();
-    print(ratingList);
-
     return ratingList;
   }
 }

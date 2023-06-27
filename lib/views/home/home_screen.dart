@@ -113,28 +113,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppColors.greyBackground,
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: AppColors.greyText,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              "Tìm kiếm món ăn hoặc quán",
-                              style: TextStyle(color: AppColors.greyText),
-                            )
-                          ],
+                      InkWell(
+                        onTap: () {
+                          NavigationService().pushNamed(ROUTE_SEARCH);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.greyBackground,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: AppColors.greyText,
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                "Tìm kiếm món ăn hoặc quán",
+                                style: TextStyle(color: AppColors.greyText),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),

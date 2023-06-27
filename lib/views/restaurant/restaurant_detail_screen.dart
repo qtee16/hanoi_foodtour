@@ -18,18 +18,18 @@ import '../../view_models/auth_view_model.dart';
 import '../../widgets/app_toaster.dart';
 import '../../widgets/custom_loading.dart';
 
-class RestaurantDetail extends StatefulWidget {
-  const RestaurantDetail({
+class RestaurantDetailScreen extends StatefulWidget {
+  const RestaurantDetailScreen({
     super.key,
     required this.restaurant,
   });
   final Restaurant restaurant;
 
   @override
-  State<RestaurantDetail> createState() => _RestaurantDetailState();
+  State<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
 }
 
-class _RestaurantDetailState extends State<RestaurantDetail> {
+class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
   double? myRating;
   String? userId;
   String? token;
@@ -78,7 +78,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
           if (rating != null) {
             setState(() {
               myRating = rating.rating;
-              print(myRating);
             });
           }
         },
@@ -90,8 +89,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     final foodList = await context
         .read<RestaurantViewModel>()
         .getAllFoodOfRestaurant(widget.restaurant.id);
-    print("FOOD LIST");
-    print(foodList);
     setState(() {
       foods = List.from(foodList);
     });
@@ -131,7 +128,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: maxWidth,
                 height: 280,
                 child: Stack(
@@ -383,10 +380,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               const SizedBox(
                 height: 8,
               ),
-              // const ListCardItem(
-              //   title: "Menu của quán",
-              //   subTitle: "Khám phá các món ăn đa dạng",
-              // ),
+              foods.isNotEmpty
+                ? ListCardItem(
+                  title: "Menu của quán",
+                  subTitle: "Khám phá các món ăn đa dạng",
+                  data: foods,
+                )
+                : const SizedBox(),
               const SizedBox(
                 height: 8,
               ),
