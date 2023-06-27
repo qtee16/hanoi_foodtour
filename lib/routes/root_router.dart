@@ -8,10 +8,11 @@ import 'package:hanoi_foodtour/views/food/food_detail_screen.dart';
 import 'package:hanoi_foodtour/views/home/home_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
-import 'package:hanoi_foodtour/views/restaurant/restaurant_detail.dart';
+import 'package:hanoi_foodtour/views/restaurant/restaurant_detail_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_food_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_overview_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_restaurant_screen.dart';
+import 'package:hanoi_foodtour/views/search/search_screen.dart';
 import 'package:hanoi_foodtour/views/splash/splash.dart';
 
 import 'routes.dart';
@@ -62,7 +63,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       Restaurant restaurant = arguments["restaurant"];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: RestaurantDetail(
+        viewToShow: RestaurantDetailScreen(
           restaurant: restaurant,
         ),
       );
@@ -88,6 +89,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: ReviewFoodScreen(
           restaurantId: restaurantId,
         ),
+      );
+    case ROUTE_SEARCH:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const SearchScreen(),
       );
     default:
       return MaterialPageRoute(

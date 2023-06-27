@@ -7,7 +7,6 @@ import '../../utils/utils.dart';
 @singleton
 class FoodRepo {
   Future<Food> createFood(Map<String, dynamic> data, String? token) async {
-    print("ADD FOOD");
     final response = await Dio().post(
       "${Utils.apiUrl}/api/review/food",
       data: data,
@@ -20,7 +19,6 @@ class FoodRepo {
       ),
     );
     final responseData = response.data;
-    print(responseData);
     final food = Food.fromJson(responseData["data"]);
     return food;
   }

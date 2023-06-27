@@ -136,7 +136,7 @@ class ListCardItem extends StatelessWidget {
                                         width: 8,
                                       ),
                                       Text(
-                                        "${(item as Food).price}VND",
+                                        "${(item as Food).price} VND",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,

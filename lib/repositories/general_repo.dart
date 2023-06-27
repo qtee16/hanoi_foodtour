@@ -3,6 +3,7 @@ import 'package:hanoi_foodtour/repositories/remote/auth_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/food_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/rating_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/restaurant_repo.dart';
+import 'package:hanoi_foodtour/repositories/remote/search_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/user_repo.dart';
 import 'package:injectable/injectable.dart';
 
@@ -17,6 +18,7 @@ class GeneralRepo {
   final RestaurantRepo _restaurantRepo;
   final RatingRepo _ratingRepo;
   final FoodRepo _foodRepo;
+  final SearchRepo _searchRepo;
 
   GeneralRepo(
     this._authRepo,
@@ -24,6 +26,7 @@ class GeneralRepo {
     this._restaurantRepo,
     this._ratingRepo,
     this._foodRepo,
+    this._searchRepo,
   );
 
   // -------------- Auth repo --------------
@@ -56,12 +59,16 @@ class GeneralRepo {
     return await _restaurantRepo.createRestaurant(data, token);
   }
 
-  Future<List<Restaurant>?> fetchAllReviewedRestaurant(String? token) async {
-    return await _restaurantRepo.fetchAllReviewedRestaurant(token);
+  Future<List<Restaurant>?> getAllReviewedRestaurant(String? token) async {
+    return await _restaurantRepo.getAllReviewedRestaurant(token);
   }
 
   Future<List<Restaurant>> getAllRestaurant() async {
     return await _restaurantRepo.getAllRestaurant();
+  }
+
+  Future<Restaurant> getRestaurantById(String restaurantId) async {
+    return await _restaurantRepo.getRestaurantById(restaurantId);
   }
 
   Future<List<Food>> getAllFoodOfRestaurant(String restaurantId) async {
@@ -112,4 +119,11 @@ class GeneralRepo {
     return await _foodRepo.getAllFood();
   }
   // ---------------------------------------
+
+  // -------------- Search repo --------------
+  Future<Map<String, dynamic>> searchFoodAndRestaurant(String searchText) async {
+    return await _searchRepo.searchFoodAndRestaurant(searchText);
+  }
+  // ---------------------------------------
+
 }
