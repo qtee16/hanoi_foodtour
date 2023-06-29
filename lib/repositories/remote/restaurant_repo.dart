@@ -61,9 +61,9 @@ class RestaurantRepo {
     }
   }
 
-  Future<List<Restaurant>> getAllRestaurant() async {
+  Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/restaurant",
+      "${Utils.apiUrl}/api/restaurant?limit=$limit&page=$page",
       options: Options(
         headers: {
           'Content-Type': 'application/json',

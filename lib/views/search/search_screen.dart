@@ -26,6 +26,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: TextFormField(
+          autofocus: true,
           cursorColor: AppColors.mainColor,
           decoration: const InputDecoration(
             hintText: "Tìm kiếm món ăn hoặc quán",

@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   updateRestaurants() async {
-    final data = await context.read<RestaurantViewModel>().getAllRestaurant();
+    final data = await context.read<RestaurantViewModel>().getTopRatingRestaurants(10);
     if (data.isNotEmpty) {
       setState(() {
         restaurants = List.from(data);
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   updateFoods() async {
-    final data = await context.read<FoodViewModel>().getAllFood();
+    final data = await context.read<FoodViewModel>().getTopRatingFoods(10);
     if (data.isNotEmpty) {
       setState(() {
         foods = List.from(data);
@@ -148,15 +148,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 8),
                 ListCardItem(
-                  title: "Những món phở thịnh hành",
-                  subTitle: "Nơi lưu giữ hương vị truyền thống",
+                  title: "Món ăn thịnh hành",
+                  subTitle: "Tinh hoa ẩm thực Việt",
                   data: foods,
+                  type: "top-rating-food",
                 ),
                 const SizedBox(height: 8),
                 ListCardItem(
-                  title: "Những quán phở thịnh hành",
+                  title: "Quán ăn thịnh hành",
                   subTitle: "Nơi lưu giữ hương vị truyền thống",
                   data: restaurants,
+                  type: "top-rating-restaurant",
                   isFoodList: false,
                 ),
                 const SizedBox(height: 8),
