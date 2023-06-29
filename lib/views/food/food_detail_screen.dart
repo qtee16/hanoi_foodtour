@@ -334,13 +334,12 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               const SizedBox(
                 height: 8,
               ),
-              otherFoods.isNotEmpty
-                ? ListCardItem(
-                  title: "Những món ăn khác của quán",
-                  subTitle: "Khám phá các món ăn đa dạng",
-                  data: otherFoods,
-                )
-                : const SizedBox(),
+              ListCardItem(
+                title: "Những món ăn khác của quán",
+                subTitle: "Khám phá các món ăn đa dạng",
+                data: otherFoods,
+                type: "other-food-of-restaurant",
+              ),
               const SizedBox(
                 height: 8,
               ),
@@ -377,9 +376,12 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               const SizedBox(
                 height: 8,
               ),
-              const ContentContainer(
+              ContentContainer(
                 title: "Bình luận",
-                contentWidget: CommentWidget(),
+                contentWidget: CommentWidget(
+                  objectId: widget.food.id,
+                  type: "food",
+                ),
               ),
               const SizedBox(
                 height: 8,

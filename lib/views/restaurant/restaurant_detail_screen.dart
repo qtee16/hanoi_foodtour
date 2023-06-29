@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/constants.dart';
+import 'package:hanoi_foodtour/models/comment.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/utils/utils.dart';
+import 'package:hanoi_foodtour/view_models/comment_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/comment_widget.dart';
 import 'package:hanoi_foodtour/widgets/content_container.dart';
 import 'package:hanoi_foodtour/widgets/custom_rating_widget.dart';
 import 'package:hanoi_foodtour/widgets/list_card_item.dart';
+import 'package:hanoi_foodtour/widgets/shimmer_loading.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/food.dart';
@@ -234,8 +237,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                             const SizedBox(
                               width: 4,
                             ),
-                            SizedBox(
-                              width: 300,
+                            Expanded(
                               child: Text(
                                 widget.restaurant.address,
                                 overflow: TextOverflow.ellipsis,
@@ -310,7 +312,8 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                           height: 8,
                         ),
                         Wrap(
-                          children: categories.map((item) {
+                          children: categories.isNotEmpty
+                          ? categories.map((item) {
                             return Container(
                               margin:
                                   const EdgeInsets.only(bottom: 4, right: 4),
@@ -325,7 +328,24 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                                     color: AppColors.whiteColor),
                               ),
                             );
-                          }).toList(),
+                          }).toList()
+                          : [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(bottom: 4, right: 4),
+                              child: ShimmerLoading(width: 60, height: 28, border: 16,),
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(bottom: 4, right: 4),
+                              child: ShimmerLoading(width: 60, height: 28, border: 16,),
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(bottom: 4, right: 4),
+                              child: ShimmerLoading(width: 60, height: 28, border: 16,),
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 16,
@@ -380,13 +400,12 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               const SizedBox(
                 height: 8,
               ),
-              foods.isNotEmpty
-                ? ListCardItem(
-                  title: "Menu của quán",
-                  subTitle: "Khám phá các món ăn đa dạng",
-                  data: foods,
-                )
-                : const SizedBox(),
+              ListCardItem(
+                title: "Menu của quán",
+                subTitle: "Khám phá các món ăn đa dạng",
+                data: foods,
+                type: "restaurant-menu",
+              ),
               const SizedBox(
                 height: 8,
               ),
@@ -423,9 +442,21 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               const SizedBox(
                 height: 8,
               ),
-              const ContentContainer(
+              ContentContainer(
                 title: "Bình luận",
-                contentWidget: CommentWidget(),
+                isCommentWidget: true,
+                contentWidget: CommentWidget(
+                  type: "restaurant",
+                  objectId: widget.restaurant.id,
+                  // onComment: (content) async {
+                  //   final data = {
+                  //     "userId": userId,
+                  //     "content": content,
+                  //   };
+                  //   Comment comment = await context.read<CommentViewModel>().sendComment("restaurant", data, widget.restaurant.id, token!);
+                  //   return comment;
+                  // },
+                ),
               ),
               const SizedBox(
                 height: 8,

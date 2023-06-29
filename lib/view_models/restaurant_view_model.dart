@@ -31,8 +31,8 @@ class RestaurantViewModel extends ChangeNotifier {
     }
   }
 
-  Future<List<Restaurant>> getAllRestaurant() async {
-    return await generalRepo.getAllRestaurant();
+  Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {
+    return await generalRepo.getTopRatingRestaurants(limit, page: page);
   }
 
   Future<void> ratingRestaurant(Map<String, dynamic> data, String token) async {

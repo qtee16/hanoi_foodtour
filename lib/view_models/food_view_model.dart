@@ -13,8 +13,8 @@ class FoodViewModel extends ChangeNotifier {
     return await generalRepo.createFood(data, token);
   }
 
-  Future<List<Food>> getAllFood() async {
-    return await generalRepo.getAllFood();
+  Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
+    return await generalRepo.getTopRatingFoods(limit, page: page);
   }
 
   Future<void> ratingFood(Map<String, dynamic> data, String token) async {

@@ -7,9 +7,11 @@ class ContentContainer extends StatelessWidget {
     super.key,
     required this.title,
     required this.contentWidget,
+    this.isCommentWidget = false,
   });
   final String title;
   final Widget contentWidget;
+  final bool isCommentWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +19,27 @@ class ContentContainer extends StatelessWidget {
     return Container(
       width: maxWidth,
       color: AppColors.whiteColor,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(
             height: 16,
           ),
-          contentWidget
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: isCommentWidget ? 0 : 16),
+            child: contentWidget,
+          )
         ],
       ),
     );

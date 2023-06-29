@@ -1,5 +1,6 @@
 import 'package:hanoi_foodtour/models/user.dart';
 import 'package:hanoi_foodtour/repositories/remote/auth_repo.dart';
+import 'package:hanoi_foodtour/repositories/remote/comment_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/food_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/rating_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/restaurant_repo.dart';
@@ -7,6 +8,7 @@ import 'package:hanoi_foodtour/repositories/remote/search_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/user_repo.dart';
 import 'package:injectable/injectable.dart';
 
+import '../models/comment.dart';
 import '../models/food.dart';
 import '../models/rating.dart';
 import '../models/restaurant.dart';
@@ -19,6 +21,7 @@ class GeneralRepo {
   final RatingRepo _ratingRepo;
   final FoodRepo _foodRepo;
   final SearchRepo _searchRepo;
+  final CommentRepo _commentRepo;
 
   GeneralRepo(
     this._authRepo,
@@ -27,6 +30,7 @@ class GeneralRepo {
     this._ratingRepo,
     this._foodRepo,
     this._searchRepo,
+    this._commentRepo,
   );
 
   // -------------- Auth repo --------------
@@ -51,6 +55,10 @@ class GeneralRepo {
   Future<User?> fetchCurrentUser() async {
     return await _userRepo.fetchCurrentUser();
   }
+
+  Future<User?> getUserById(String userId) async {
+    return await _userRepo.getUserById(userId);
+  }
   // ---------------------------------------
 
   // -------------- Restaurant repo --------------
@@ -63,8 +71,8 @@ class GeneralRepo {
     return await _restaurantRepo.getAllReviewedRestaurant(token);
   }
 
-  Future<List<Restaurant>> getAllRestaurant() async {
-    return await _restaurantRepo.getAllRestaurant();
+  Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {
+    return await _restaurantRepo.getTopRatingRestaurants(limit, page: page);
   }
 
   Future<Restaurant> getRestaurantById(String restaurantId) async {
@@ -115,14 +123,24 @@ class GeneralRepo {
     return await _foodRepo.createFood(data, token);
   }
 
-  Future<List<Food>> getAllFood() async {
-    return await _foodRepo.getAllFood();
+  Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
+    return await _foodRepo.getTopRatingFoods(limit, page: page);
   }
   // ---------------------------------------
 
   // -------------- Search repo --------------
   Future<Map<String, dynamic>> searchFoodAndRestaurant(String searchText) async {
     return await _searchRepo.searchFoodAndRestaurant(searchText);
+  }
+  // ---------------------------------------
+
+  // -------------- Comment repo --------------
+  Future<Comment> sendComment(String type, Map<String, dynamic> data, String restaurantId, String token) async {
+    return await _commentRepo.sendComment(type, data, restaurantId, token);
+  }
+
+  Future<List<Comment>> getComment(String type, String restaurantId, int limit, {int page = 0}) async {
+    return await _commentRepo.getComment(type, restaurantId, limit, page: page);
   }
   // ---------------------------------------
 

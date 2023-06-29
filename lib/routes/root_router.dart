@@ -14,6 +14,7 @@ import 'package:hanoi_foodtour/views/review/review_overview_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_restaurant_screen.dart';
 import 'package:hanoi_foodtour/views/search/search_screen.dart';
 import 'package:hanoi_foodtour/views/splash/splash.dart';
+import 'package:hanoi_foodtour/views/list_detail/list_detail_screen.dart';
 
 import 'routes.dart';
 
@@ -68,9 +69,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
       );
     case ROUTE_COMMENT:
+      String objectId = arguments["objectId"];
+      String type = arguments["type"];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const CommentScreen(),
+        viewToShow: CommentScreen(objectId: objectId, type: type,),
       );
     case ROUTE_REVIEW_OVERVIEW:
       return _getPageRoute(
@@ -94,6 +97,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const SearchScreen(),
+      );
+    case ROUTE_LIST_DETAIL:
+      String title = arguments["title"];
+      String type = arguments["type"];
+      bool? isFood = arguments["isFood"];
+      List? data = arguments["data"];
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: ListDetailScreen(title: title, type: type, isFood: isFood ?? true, data: data,),
       );
     default:
       return MaterialPageRoute(

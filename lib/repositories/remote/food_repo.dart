@@ -23,9 +23,9 @@ class FoodRepo {
     return food;
   }
 
-  Future<List<Food>> getAllFood() async {
+  Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/food",
+      "${Utils.apiUrl}/api/food?limit=$limit&page=$page",
       options: Options(
         headers: {
           'Content-Type': 'application/json',
