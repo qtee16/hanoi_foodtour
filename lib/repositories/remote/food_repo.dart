@@ -8,7 +8,7 @@ import '../../utils/utils.dart';
 class FoodRepo {
   Future<Food> createFood(Map<String, dynamic> data, String? token) async {
     final response = await Dio().post(
-      "${Utils.apiUrl}/api/review/food",
+      "${Utils.apiUrl}/api/v1/review/food",
       data: data,
       options: Options(
         headers: {
@@ -25,7 +25,7 @@ class FoodRepo {
 
   Future<Food> getFoodById(String foodId) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/food/$foodId",
+      "${Utils.apiUrl}/api/v1/food/$foodId",
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ class FoodRepo {
 
   Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/food?limit=$limit&page=$page",
+      "${Utils.apiUrl}/api/v1/food?limit=$limit&page=$page",
       options: Options(
         headers: {
           'Content-Type': 'application/json',

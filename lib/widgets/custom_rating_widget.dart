@@ -87,7 +87,6 @@ class _CustomRatingWidgetState extends State<CustomRatingWidget> {
     if (widget.myRating != null && !isLoadedCurrentRating) {
       _rating = widget.myRating!;
       isLoadedCurrentRating = true;
-      print("FETCH: ${widget.myRating}");
     }
 
     final ratingsData = processRating();

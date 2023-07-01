@@ -11,6 +11,7 @@ import 'package:hanoi_foodtour/services/location_service.dart';
 import 'package:hanoi_foodtour/services/select_image.dart';
 import 'package:hanoi_foodtour/utils/utils.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
+import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 
@@ -37,15 +38,28 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
   Position? location;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.restaurant != null) {
+      restaurantNameController.text = widget.restaurant!.restaurantName;
+      addressController.text = widget.restaurant!.address;
+      locationController.text = "(${widget.restaurant!.locationLat}, ${widget.restaurant!.locationLong})";
+      reviewController.text = widget.restaurant!.review;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
-        title: const Text(
-          "Review quán mới",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        title: Text(
+          widget.restaurant != null
+            ? "Chỉnh sửa thông tin"
+            : "Review quán mới",
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
       body: SingleChildScrollView(
@@ -118,22 +132,29 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
               Center(
                 child: Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: restaurantAvatar == null
-                          ? Image.asset(
-                              AssetPaths.imagePath.getDefaultLoadingImagePath,
-                              width: 160,
-                              height: 160,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              restaurantAvatar!,
-                              width: 160,
-                              height: 160,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                    widget.restaurant != null
+                      ? CachedImageWidget(
+                          imageURL: widget.restaurant!.avatarUrl,
+                          width: 160,
+                          height: 160,
+                          border: 12,
+                        )
+                      : ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: restaurantAvatar == null
+                            ? Image.asset(
+                                AssetPaths.imagePath.getDefaultLoadingImagePath,
+                                width: 160,
+                                height: 160,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                restaurantAvatar!,
+                                width: 160,
+                                height: 160,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     Positioned(
                       top: 60,
                       left: 60,
@@ -184,22 +205,29 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
               Center(
                 child: Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: restaurantCoverImage == null
-                          ? Image.asset(
-                              AssetPaths.imagePath.getDefaultLoadingImagePath,
-                              width: 160,
-                              height: 160,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              restaurantCoverImage!,
-                              width: 160,
-                              height: 160,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                    widget.restaurant != null
+                      ? CachedImageWidget(
+                          imageURL: widget.restaurant!.coverImageUrl,
+                          width: 160,
+                          height: 160,
+                          border: 12,
+                        )
+                      : ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: restaurantCoverImage == null
+                            ? Image.asset(
+                                AssetPaths.imagePath.getDefaultLoadingImagePath,
+                                width: 160,
+                                height: 160,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                restaurantCoverImage!,
+                                width: 160,
+                                height: 160,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     Positioned(
                       top: 60,
                       left: 60,

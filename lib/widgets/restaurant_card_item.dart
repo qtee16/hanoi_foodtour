@@ -57,9 +57,13 @@ class _RestaurantCardItemState extends State<RestaurantCardItem> {
             Container(
               decoration: const BoxDecoration(color: AppColors.greyBackground),
               child: CupertinoActionSheetAction(
-                onPressed: () { 
-                  // do jump to message
-                  // Utils.jumpToMessageFromMedia(context, item, isDirect: isDirect);
+                onPressed: () {
+                  NavigationService().pushNamed(
+                    ROUTE_REVIEW_RESTAURANT,
+                    arguments: {
+                      "restaurant" : widget.restaurant,
+                    },
+                  );
                 },
                 child: renderTextAndIconDialog(
                   icon: const Icon(Icons.edit,),
