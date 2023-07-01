@@ -26,7 +26,7 @@ class ListItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(icon),
+            Image.asset(icon, width: 20, height: 20, fit: BoxFit.cover,),
             const SizedBox(
               width: 16,
             ),

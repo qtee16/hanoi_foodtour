@@ -23,6 +23,21 @@ class FoodRepo {
     return food;
   }
 
+  Future<Food> getFoodById(String foodId) async {
+    final response = await Dio().get(
+      "${Utils.apiUrl}/api/food/$foodId",
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    final responseData = response.data;
+    Food restaurant = Food.fromJson(responseData["data"]);
+    return restaurant;
+  }
+
   Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
     final response = await Dio().get(
       "${Utils.apiUrl}/api/food?limit=$limit&page=$page",

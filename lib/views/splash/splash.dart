@@ -3,6 +3,7 @@ import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
+import 'package:hanoi_foodtour/view_models/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,11 +27,19 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    checkLogined().then((value) {
+    checkLogined().then((value) async {
       if (value) {
-        context.read<AuthViewModel>().fetchCurrentUser().then((value) {
-          NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
-        });
+        final authViewModel = context.read<AuthViewModel>();
+        await authViewModel.fetchCurrentUser();
+        if (authViewModel.currentUser != null) {
+          final userId = authViewModel.currentUser!.id;
+          final token = authViewModel.token;
+          // ignore: use_build_context_synchronously
+          await context.read<UserViewModel>().getMyLikes(userId, "restaurant", token!);
+          // ignore: use_build_context_synchronously
+          await context.read<UserViewModel>().getMyLikes(userId, "food", token);
+        }
+        NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
       } else {
         NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
       }

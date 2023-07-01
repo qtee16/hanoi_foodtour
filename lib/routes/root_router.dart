@@ -4,6 +4,7 @@ import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/views/auth/sign_in_screen.dart';
 import 'package:hanoi_foodtour/views/auth/sign_up_screen.dart';
 import 'package:hanoi_foodtour/views/comment/comment_screen.dart';
+import 'package:hanoi_foodtour/views/favorite/favorite_screen.dart';
 import 'package:hanoi_foodtour/views/food/food_detail_screen.dart';
 import 'package:hanoi_foodtour/views/home/home_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
@@ -54,18 +55,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case ROUTE_FOOD_DETAIL:
       Food food = arguments["food"];
+      List? likedData = arguments["likedData"];
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: FoodDetailScreen(
           food: food,
+          likedData: likedData,
         ),
       );
     case ROUTE_RESTAURANT_DETAIL:
       Restaurant restaurant = arguments["restaurant"];
+      List? likedData = arguments["likedData"];
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: RestaurantDetailScreen(
           restaurant: restaurant,
+          likedData: likedData,
         ),
       );
     case ROUTE_COMMENT:
@@ -106,6 +111,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: ListDetailScreen(title: title, type: type, isFood: isFood ?? true, data: data,),
+      );
+    case ROUTE_FAVORITE:
+      String title = arguments["title"];
+      String type = arguments["type"];
+      bool? isFood = arguments["isFood"];
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: FavoriteScreen(title: title, type: type, isFood: isFood ?? true,),
       );
     default:
       return MaterialPageRoute(
