@@ -2,6 +2,7 @@ import 'package:hanoi_foodtour/models/user.dart';
 import 'package:hanoi_foodtour/repositories/remote/auth_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/comment_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/food_repo.dart';
+import 'package:hanoi_foodtour/repositories/remote/like_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/rating_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/restaurant_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/search_repo.dart';
@@ -22,6 +23,7 @@ class GeneralRepo {
   final FoodRepo _foodRepo;
   final SearchRepo _searchRepo;
   final CommentRepo _commentRepo;
+  final LikeRepo _likeRepo;
 
   GeneralRepo(
     this._authRepo,
@@ -31,6 +33,7 @@ class GeneralRepo {
     this._foodRepo,
     this._searchRepo,
     this._commentRepo,
+    this._likeRepo,
   );
 
   // -------------- Auth repo --------------
@@ -123,6 +126,10 @@ class GeneralRepo {
     return await _foodRepo.createFood(data, token);
   }
 
+  Future<Food> getFoodById(String foodId) async {
+    return await _foodRepo.getFoodById(foodId);
+  }
+
   Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
     return await _foodRepo.getTopRatingFoods(limit, page: page);
   }
@@ -141,6 +148,20 @@ class GeneralRepo {
 
   Future<List<Comment>> getComment(String type, String restaurantId, int limit, {int page = 0}) async {
     return await _commentRepo.getComment(type, restaurantId, limit, page: page);
+  }
+  // ---------------------------------------
+
+  // -------------- Like repo --------------
+  Future<Map<String, dynamic>> sendLike(String userId, String objectId, String type, String token) async {
+    return await _likeRepo.sendLike(userId, objectId, type, token);
+  }
+
+  Future<List> getAllLike(String objectId, String type) async {
+    return await _likeRepo.getAllLike(objectId, type);
+  }
+
+  Future<List> getMyLikes(String userId, String type, String token) async {
+    return await _likeRepo.getMyLikes(userId, type, token);
   }
   // ---------------------------------------
 

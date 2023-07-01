@@ -139,7 +139,14 @@ class _MyListWidgetState extends State<MyListWidget> {
                 ),
                 widget.isFood
                   ? FoodCardItem(food: _dataList[index])
-                  : RestaurantCardItem(restaurant: _dataList[index])
+                  : RestaurantCardItem(restaurant: _dataList[index]),
+                index == _dataList.length - 1
+                  ? const Divider(
+                    height: 0.5,
+                    thickness: 0.5,
+                    color: AppColors.greyBorder,
+                  )
+                  : const SizedBox(),
               ],
             );
         } else {

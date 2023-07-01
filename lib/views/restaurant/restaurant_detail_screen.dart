@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/constants.dart';
-import 'package:hanoi_foodtour/models/comment.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/utils/utils.dart';
-import 'package:hanoi_foodtour/view_models/comment_view_model.dart';
+import 'package:hanoi_foodtour/view_models/like_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
+import 'package:hanoi_foodtour/view_models/user_view_model.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/comment_widget.dart';
 import 'package:hanoi_foodtour/widgets/content_container.dart';
@@ -25,8 +25,10 @@ class RestaurantDetailScreen extends StatefulWidget {
   const RestaurantDetailScreen({
     super.key,
     required this.restaurant,
+    this.likedData,
   });
   final Restaurant restaurant;
+  final List? likedData;
 
   @override
   State<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
@@ -43,6 +45,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
   List<Rating> ratings = [];
   List<int> categories = [];
   List<Food> foods = [];
+  List likedData = [];
 
   @override
   void initState() {
@@ -51,6 +54,13 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     countRatings = widget.restaurant.countRatings;
     updateFood();
     updateRating();
+    if (widget.likedData != null) {
+      setState(() {
+        likedData = widget.likedData!;
+      });
+    } else {
+      updateLike();
+    }
 
     final authViewModel = context.read<AuthViewModel>();
     userId = authViewModel.currentUser?.id;
@@ -119,6 +129,14 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
       ratings = List.from(newRating);
       countRatings = ratings.length;
       rating = sum / countRatings;
+    });
+  }
+
+  updateLike() async {
+    print("Load like api");
+    final newLikes = await context.read<LikeViewModel>().getAllLike(widget.restaurant.id, "restaurant");
+    setState(() {
+      likedData = List.from(newLikes);
     });
   }
 
@@ -253,8 +271,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                           children: [
                             Image.asset(
                               AssetPaths.iconPath.getStarIconPath,
-                              width: 20,
-                              height: 20,
+                              width: 16,
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.high,
                             ),
@@ -280,8 +297,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                           children: [
                             Image.asset(
                               AssetPaths.iconPath.getHeartIconPath,
-                              width: 20,
-                              height: 20,
+                              width: 16,
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.high,
                             ),
@@ -291,8 +307,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                             SizedBox(
                               width: 300,
                               child: Text(
-                                widget.restaurant.likedUserIdList.length
-                                    .toString(),
+                                likedData.length.toString(),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -333,17 +348,17 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                             Container(
                               margin:
                                   const EdgeInsets.only(bottom: 4, right: 4),
-                              child: ShimmerLoading(width: 60, height: 28, border: 16,),
+                              child: const ShimmerLoading(width: 60, height: 28, border: 16,),
                             ),
                             Container(
                               margin:
                                   const EdgeInsets.only(bottom: 4, right: 4),
-                              child: ShimmerLoading(width: 60, height: 28, border: 16,),
+                              child: const ShimmerLoading(width: 60, height: 28, border: 16,),
                             ),
                             Container(
                               margin:
                                   const EdgeInsets.only(bottom: 4, right: 4),
-                              child: ShimmerLoading(width: 60, height: 28, border: 16,),
+                              child: const ShimmerLoading(width: 60, height: 28, border: 16,),
                             ),
                           ],
                         ),
@@ -473,33 +488,50 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => AppColors.whiteColor),
-                  side: MaterialStateBorderSide.resolveWith(
-                      (states) => const BorderSide(color: Colors.red))),
-              onPressed: () {},
-              child: Row(
-                children: [
-                  Image.asset(
-                    AssetPaths.iconPath.getHeartIconPath,
-                    width: 16,
-                    height: 16,
-                    fit: BoxFit.cover,
+            Consumer<UserViewModel>(
+              builder: (context, model, child) {
+                bool isLiked = model.likedRestaurants.any((element) => element.id == widget.restaurant.id,);
+                return ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => AppColors.whiteColor),
+                      side: MaterialStateBorderSide.resolveWith(
+                          (states) => const BorderSide(color: Colors.red))),
+                  onPressed: () async {
+                    if (isLogin) {
+                      final response = await context.read<LikeViewModel>().sendLike(userId!, widget.restaurant.id, "restaurant", token!);
+                      final data = response["data"];
+                      updateLike();
+                      if (response["message"] == "liked-restaurant-success") {
+                        await model.likedRestaurant(data["restaurantId"]);
+                      } else if (response["message"] == "unliked-restaurant-success") {
+                        model.unlikedRestaurant(data["restaurantId"]);
+                      }
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        isLiked
+                          ? AssetPaths.iconPath.getHeartIconPath
+                          : AssetPaths.iconPath.getHeartOutlineIconPath,
+                        height: 16,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        isLiked ? "Bỏ thích" : "Yêu thích",
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  const Text(
-                    "Yêu thích",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
             ElevatedButton(
               style: ButtonStyle(

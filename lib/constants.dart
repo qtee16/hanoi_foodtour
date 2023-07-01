@@ -33,7 +33,8 @@ class IconPath {
   final getCoinIconPath = "assets/icons/coin.png";
   final getStarIconPath = "assets/icons/star.png";
   final getLocationIconPath = "assets/icons/location.png";
-  final getHeartIconPath = "assets/icons/heart_fill.png";
+  final getHeartIconPath = "assets/icons/heart-filled.png";
+  final getHeartOutlineIconPath = "assets/icons/heart-outline.png";
   final getRouteIconPath = "assets/icons/route.png";
   final getLikeOutlineIconPath = "assets/icons/like-outline.png";
   final getLikeFillIconPath = "assets/icons/like-fill.png";
@@ -44,4 +45,5 @@ class IconPath {
   final getCheckIconPath = "assets/icons/toast/checked_icon.svg";
   final getAlertIconPath = "assets/icons/toast/alert_triangle.svg";
   final getLoadingIconPath = "assets/icons/loading.png";
+  final getReviewIconPath = "assets/icons/review.png";
 }

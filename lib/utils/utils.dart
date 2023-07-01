@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 
 class Utils {
-  static String apiUrl = "http://192.168.1.5:5001";
+  static String apiUrl = "http://192.168.1.9:5001";
   // static String apiUrl = "https://hanoi-foodtour-api.vercel.app";
 
   static Future<String> encodeImage(File image) async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hanoi_foodtour/constants.dart';
+import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/services/location_service.dart';
@@ -18,7 +19,8 @@ import '../../widgets/app_toaster.dart';
 import '../../widgets/form_field_widget.dart';
 
 class ReviewRestaurantScreen extends StatefulWidget {
-  const ReviewRestaurantScreen({super.key});
+  const ReviewRestaurantScreen({super.key, this.restaurant});
+  final Restaurant? restaurant;
 
   @override
   State<ReviewRestaurantScreen> createState() => _ReviewRestaurantScreenState();

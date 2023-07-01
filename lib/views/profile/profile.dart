@@ -3,6 +3,7 @@ import 'package:hanoi_foodtour/constants.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/user_view_model.dart';
 import 'package:hanoi_foodtour/views/profile/widgets/list_item.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:provider/provider.dart';
@@ -112,7 +113,16 @@ class _ProfileState extends State<Profile> {
           ListItem(
             icon: AssetPaths.iconPath.getRestaurantIconPath,
             title: "Danh sách quán yêu thích",
-            onTap: () {},
+            onTap: () {
+              NavigationService().pushNamed(
+                ROUTE_FAVORITE,
+                arguments: {
+                  "title": "Danh sách quán yêu thích",
+                  "type": "my-liked-restaurant",
+                  "isFood": false,
+                }
+              );
+            },
           ),
           const Divider(
             height: 1,
@@ -122,7 +132,15 @@ class _ProfileState extends State<Profile> {
           ListItem(
             icon: AssetPaths.iconPath.getFoodIconPath,
             title: "Danh sách món ăn yêu thích",
-            onTap: () {},
+            onTap: () {
+              NavigationService().pushNamed(
+                ROUTE_FAVORITE,
+                arguments: {
+                  "title": "Danh sách quán yêu thích",
+                  "type": "my-liked-food",
+                }
+              );
+            },
           ),
           const Divider(
             height: 1,
@@ -140,7 +158,7 @@ class _ProfileState extends State<Profile> {
             color: AppColors.greyColor,
           ),
           ListItem(
-            icon: AssetPaths.iconPath.getMapIconPath,
+            icon: AssetPaths.iconPath.getReviewIconPath,
             title: "Review của bạn",
             onTap: () {
               NavigationService().pushNamed(ROUTE_REVIEW_OVERVIEW);
