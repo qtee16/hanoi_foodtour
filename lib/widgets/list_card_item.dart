@@ -105,7 +105,7 @@ class ListCardItem extends StatelessWidget {
                             );
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: 160,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +149,7 @@ class ListCardItem extends StatelessWidget {
                                         ),
                                         Text(
                                           "${(item as Food).price} VND",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,
                                           ),
@@ -240,9 +240,9 @@ class ListCardItem extends StatelessWidget {
                       SizedBox(
                         width: index == 0 ? 16 : 24,
                       ),
-                      Container(
+                      const SizedBox(
                         width: 160,
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ShimmerLoading(width: 160, height: 160, border: 8),

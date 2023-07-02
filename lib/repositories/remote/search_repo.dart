@@ -10,7 +10,7 @@ class SearchRepo {
       "searchText": searchText,
     };
     final response = await Dio().post(
-      "${Utils.apiUrl}/api/search",
+      "${Utils.apiUrl}/api/v1/search",
       data: data,
     );
     final responseData = response.data;

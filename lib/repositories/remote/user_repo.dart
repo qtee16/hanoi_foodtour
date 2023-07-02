@@ -18,7 +18,7 @@ class UserRepo {
       final userId = userData["user_id"];
       final token = userData["token"];
       final response = await Dio().get(
-        "${Utils.apiUrl}/api/users/currentUser/$userId", 
+        "${Utils.apiUrl}/api/v1/users/currentUser/$userId", 
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ class UserRepo {
 
   Future<User?> getUserById(String userId) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/users/$userId",
+      "${Utils.apiUrl}/api/v1/users/$userId",
     );
     final responseData = response.data;
     if (responseData["success"] == true) {

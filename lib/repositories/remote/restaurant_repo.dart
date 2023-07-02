@@ -15,8 +15,50 @@ class RestaurantRepo {
     String? token,
   ) async {
     final response = await Dio().post(
-      "${Utils.apiUrl}/api/review/restaurant",
+      "${Utils.apiUrl}/api/v1/review/restaurant",
       data: data,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = Restaurant.fromJson(responseData["data"]);
+    return restaurant;
+  }
+
+  Future<Restaurant> updateRestaurant(
+    String restaurantId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    final response = await Dio().put(
+      "${Utils.apiUrl}/api/v1/review/restaurant/$restaurantId",
+      data: data,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = Restaurant.fromJson(responseData["data"]);
+    return restaurant;
+  }
+
+  Future<Restaurant> deleteRestaurant(
+    String restaurantId,
+    String userId,
+    String token,
+  ) async {
+    final response = await Dio().delete(
+      "${Utils.apiUrl}/api/v1/review/restaurant/$restaurantId",
+      data: { "userId": userId },
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +84,7 @@ class RestaurantRepo {
         "userId": userId,
       };
       final response = await Dio().get(
-        "${Utils.apiUrl}/api/review/reviewed-restaurant",
+        "${Utils.apiUrl}/api/v1/review/reviewed-restaurant",
         data: body,
         options: Options(
           headers: {
@@ -63,7 +105,7 @@ class RestaurantRepo {
 
   Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/restaurant?limit=$limit&page=$page",
+      "${Utils.apiUrl}/api/v1/restaurant?limit=$limit&page=$page",
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +123,7 @@ class RestaurantRepo {
 
   Future<Restaurant> getRestaurantById(String restaurantId) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/restaurant/$restaurantId",
+      "${Utils.apiUrl}/api/v1/restaurant/$restaurantId",
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +138,7 @@ class RestaurantRepo {
 
   Future<List<Food>> getAllFoodOfRestaurant(String restaurantId) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/restaurant/$restaurantId/foods",
+      "${Utils.apiUrl}/api/v1/restaurant/$restaurantId/foods",
       options: Options(
         headers: {
           'Content-Type': 'application/json',

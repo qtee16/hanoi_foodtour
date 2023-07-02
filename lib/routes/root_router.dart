@@ -86,9 +86,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: const ReviewOverviewScreen(),
       );
     case ROUTE_REVIEW_RESTAURANT:
+      Restaurant? restaurant = arguments["restaurant"];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const ReviewRestaurantScreen(),
+        viewToShow: ReviewRestaurantScreen(restaurant: restaurant,),
       );
     case ROUTE_REVIEW_FOOD:
       String restaurantId = arguments["restaurantId"];

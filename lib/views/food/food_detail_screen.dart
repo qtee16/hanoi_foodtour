@@ -128,7 +128,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   }
 
   updateLike() async {
-    print("Load like api");
     final newLikes = await context.read<LikeViewModel>().getAllLike(widget.food.id, "food");
     setState(() {
       likedData = List.from(newLikes);

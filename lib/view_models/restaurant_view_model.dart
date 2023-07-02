@@ -23,6 +23,22 @@ class RestaurantViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Restaurant> updateRestaurant(
+    String restaurantId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    return await generalRepo.updateRestaurant(restaurantId, data, token);
+  }
+
+  Future<Restaurant> deleteRestaurant(
+    String restaurantId,
+    String userId,
+    String token,
+  ) async {
+    return await generalRepo.deleteRestaurant(restaurantId, userId, token);
+  }
+
   Future<void> getAllReviewedRestaurant(String? token) async {
     final result = await generalRepo.getAllReviewedRestaurant(token);
     if (result != null) {

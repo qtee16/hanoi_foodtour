@@ -8,7 +8,7 @@ import '../../utils/utils.dart';
 class RatingRepo {
   Future<void> ratingRestaurant(Map<String, dynamic> data, String token) async {
     await Dio().post(
-      "${Utils.apiUrl}/api/rating/restaurant",
+      "${Utils.apiUrl}/api/v1/rating/restaurant",
       data: data,
       options: Options(
         headers: {
@@ -26,7 +26,7 @@ class RatingRepo {
     String token,
   ) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/rating/restaurant/$userId",
+      "${Utils.apiUrl}/api/v1/rating/restaurant/$userId",
       data: data,
       options: Options(
         headers: {
@@ -46,7 +46,7 @@ class RatingRepo {
 
   Future<List<Rating>> getAllRestaurantRating(Map<String, dynamic> data) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/rating/restaurant",
+      "${Utils.apiUrl}/api/v1/rating/restaurant",
       data: data,
       options: Options(
         headers: {
@@ -65,7 +65,7 @@ class RatingRepo {
 
   Future<void> ratingFood(Map<String, dynamic> data, String token) async {
     await Dio().post(
-      "${Utils.apiUrl}/api/rating/food",
+      "${Utils.apiUrl}/api/v1/rating/food",
       data: data,
       options: Options(
         headers: {
@@ -83,7 +83,7 @@ class RatingRepo {
     String token,
   ) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/rating/food/$userId",
+      "${Utils.apiUrl}/api/v1/rating/food/$userId",
       data: data,
       options: Options(
         headers: {
@@ -103,7 +103,7 @@ class RatingRepo {
 
   Future<List<Rating>> getAllFoodRating(Map<String, dynamic> data) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/rating/food",
+      "${Utils.apiUrl}/api/v1/rating/food",
       data: data,
       options: Options(
         headers: {

@@ -24,7 +24,7 @@ class FormFieldWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         TextFormField(
           keyboardType: keyboardType,

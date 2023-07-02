@@ -11,7 +11,7 @@ class LikeRepo {
       (type == "restaurant" ? "restaurantId" : "foodId"): objectId,
     };
     final response = await Dio().post(
-      "${Utils.apiUrl}/api/like/$type",
+      "${Utils.apiUrl}/api/v1/like/$type",
       data: data,
       options: Options(
         headers: {
@@ -26,14 +26,14 @@ class LikeRepo {
   }
 
   Future<List> getAllLike(String objectId, String type) async {
-    final response = await Dio().get("${Utils.apiUrl}/api/like/$type/$objectId");
+    final response = await Dio().get("${Utils.apiUrl}/api/v1/like/$type/$objectId");
     final responseData = response.data;
     return responseData["data"];
   }
 
   Future<List> getMyLikes(String userId, String type, String token) async {
     final response = await Dio().get(
-      "${Utils.apiUrl}/api/like/user/$userId/$type",
+      "${Utils.apiUrl}/api/v1/like/user/$userId/$type",
       options: Options(
         headers: {
           'Content-Type': 'application/json',

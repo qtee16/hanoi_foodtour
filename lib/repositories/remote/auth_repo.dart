@@ -20,7 +20,7 @@ class AuthRepo {
         "password": password,
       };
       final response = await Dio().post(
-        "${Utils.apiUrl}/api/login",
+        "${Utils.apiUrl}/api/v1/login",
         data: body,
       );
       final responseData = response.data;
@@ -69,7 +69,7 @@ class AuthRepo {
         "password": password,
       };
       final response = await Dio().post(
-        '${Utils.apiUrl}/api/register',
+        '${Utils.apiUrl}/api/v1/register',
         data: body,
       );
       final responseData = response.data;
