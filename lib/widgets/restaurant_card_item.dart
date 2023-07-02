@@ -84,36 +84,45 @@ class _RestaurantCardItemState extends State<RestaurantCardItem> {
               child: CupertinoActionSheetAction(
                 onPressed: () {
                   NavigationService().pop();
-                  showCupertinoDialog(context: context, builder: (subContext) {
-                    return CupertinoAlertDialog(
-                      title: const Text("Xoá quán ăn"),
-                      content: const Text("Bạn có chắc chắn muốn xoá quán ăn?"),
-                      actions: [
-                        CupertinoButton(child: const Text("Xoá"), onPressed: () async {
-                          NavigationService().pop();
-                          showAppLoading(context);
-                          // ignore: use_build_context_synchronously
-                          await context
-                              .read<RestaurantViewModel>()
-                              .deleteRestaurant(
-                                widget.restaurant.id,
-                                authViewModel.currentUser!.id,
-                                authViewModel.token!,
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (subContext) {
+                      return CupertinoAlertDialog(
+                        title: const Text("Xoá quán ăn"),
+                        content: const Text("Bạn có chắc chắn muốn xoá quán ăn?"),
+                        actions: [
+                          CupertinoButton(
+                            child: const Text("Xoá"),
+                            onPressed: () async {
+                              NavigationService().pop();
+                              showAppLoading(context);
+                              // ignore: use_build_context_synchronously
+                              await context
+                                  .read<RestaurantViewModel>()
+                                  .deleteRestaurant(
+                                    widget.restaurant.id,
+                                    authViewModel.currentUser!.id,
+                                    authViewModel.token!,
+                                  );
+                              NavigationService().pop();
+                              // ignore: use_build_context_synchronously
+                              AppToaster.showToast(
+                                context: context,
+                                msg: "Xoá quán ăn thành công",
+                                type: AppToasterType.success,
                               );
-                          NavigationService().pop();
-                          // ignore: use_build_context_synchronously
-                          AppToaster.showToast(
-                            context: context,
-                            msg: "Xoá quán ăn thành công",
-                            type: AppToasterType.success,
-                          );
-                        }),
-                        CupertinoButton(child: const Text("Huỷ", style: TextStyle(color: AppColors.redColor),), onPressed: () {
-                          NavigationService().pop();
-                        }),
-                      ],
-                    );
-                  });
+                            },
+                          ),
+                          CupertinoButton(
+                            child: const Text("Huỷ", style: TextStyle(color: AppColors.redColor),),
+                            onPressed: () {
+                              NavigationService().pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: renderTextAndIconDialog(
                   icon: const Icon(Icons.delete,),
