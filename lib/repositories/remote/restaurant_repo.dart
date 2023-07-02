@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:hanoi_foodtour/models/food.dart';
 import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/utils.dart';
 
