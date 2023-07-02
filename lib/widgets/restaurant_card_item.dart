@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -7,14 +8,19 @@ import '../models/restaurant.dart';
 import '../routes/navigation_services.dart';
 import '../routes/routes.dart';
 import '../view_models/like_view_model.dart';
+import '../view_models/restaurant_view_model.dart';
+import 'app_toaster.dart';
 import 'cached_image_widget.dart';
+import 'custom_loading.dart';
 
 class RestaurantCardItem extends StatefulWidget {
   const RestaurantCardItem({
     super.key,
     required this.restaurant,
+    this.isShowBottomOption = false,
   });
   final Restaurant restaurant;
+  final bool isShowBottomOption;
 
   @override
   State<RestaurantCardItem> createState() => _RestaurantCardItemState();
@@ -51,13 +57,15 @@ class _RestaurantCardItemState extends State<RestaurantCardItem> {
   _showBottomOption() {
     showCupertinoModalPopup(
       context: context, 
-      builder: (context) {
+      builder: (subContext) {
+        final authViewModel = context.read<AuthViewModel>();
         return CupertinoActionSheet(
           actions: [
             Container(
               decoration: const BoxDecoration(color: AppColors.greyBackground),
               child: CupertinoActionSheetAction(
                 onPressed: () {
+                  NavigationService().pop();
                   NavigationService().pushNamed(
                     ROUTE_REVIEW_RESTAURANT,
                     arguments: {
@@ -74,9 +82,38 @@ class _RestaurantCardItemState extends State<RestaurantCardItem> {
             Container(
               decoration: const BoxDecoration(color: AppColors.greyBackground),
               child: CupertinoActionSheetAction(
-                onPressed: () { 
-                  // do jump to message
-                  // Utils.jumpToMessageFromMedia(context, item, isDirect: isDirect);
+                onPressed: () {
+                  NavigationService().pop();
+                  showCupertinoDialog(context: context, builder: (subContext) {
+                    return CupertinoAlertDialog(
+                      title: const Text("Xoá quán ăn"),
+                      content: const Text("Bạn có chắc chắn muốn xoá quán ăn?"),
+                      actions: [
+                        CupertinoButton(child: const Text("Xoá"), onPressed: () async {
+                          NavigationService().pop();
+                          showAppLoading(context);
+                          // ignore: use_build_context_synchronously
+                          await context
+                              .read<RestaurantViewModel>()
+                              .deleteRestaurant(
+                                widget.restaurant.id,
+                                authViewModel.currentUser!.id,
+                                authViewModel.token!,
+                              );
+                          NavigationService().pop();
+                          // ignore: use_build_context_synchronously
+                          AppToaster.showToast(
+                            context: context,
+                            msg: "Xoá quán ăn thành công",
+                            type: AppToasterType.success,
+                          );
+                        }),
+                        CupertinoButton(child: const Text("Huỷ", style: TextStyle(color: AppColors.redColor),), onPressed: () {
+                          NavigationService().pop();
+                        }),
+                      ],
+                    );
+                  });
                 },
                 child: renderTextAndIconDialog(
                   icon: const Icon(Icons.delete,),
@@ -103,7 +140,9 @@ class _RestaurantCardItemState extends State<RestaurantCardItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onLongPress: () {
-        _showBottomOption();
+        if (widget.isShowBottomOption) {
+          _showBottomOption();
+        }
       },
       onTap: () {
         NavigationService().pushNamed(

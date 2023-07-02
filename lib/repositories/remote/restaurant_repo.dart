@@ -30,6 +30,48 @@ class RestaurantRepo {
     return restaurant;
   }
 
+  Future<Restaurant> updateRestaurant(
+    String restaurantId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    final response = await Dio().put(
+      "${Utils.apiUrl}/api/v1/review/restaurant/$restaurantId",
+      data: data,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = Restaurant.fromJson(responseData["data"]);
+    return restaurant;
+  }
+
+  Future<Restaurant> deleteRestaurant(
+    String restaurantId,
+    String userId,
+    String token,
+  ) async {
+    final response = await Dio().delete(
+      "${Utils.apiUrl}/api/v1/review/restaurant/$restaurantId",
+      data: { "userId": userId },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = Restaurant.fromJson(responseData["data"]);
+    return restaurant;
+  }
+
   Future<List<Restaurant>?> getAllReviewedRestaurant(String? token) async {
     final refs = await SharedPreferences.getInstance();
     final encodeData = refs.getString("user_data");

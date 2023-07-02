@@ -68,6 +68,7 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
                     children: [
                       RestaurantCardItem(
                         restaurant: e,
+                        isShowBottomOption: true,
                       ),
                       const Divider(
                         height: 1,

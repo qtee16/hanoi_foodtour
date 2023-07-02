@@ -70,6 +70,22 @@ class GeneralRepo {
     return await _restaurantRepo.createRestaurant(data, token);
   }
 
+  Future<Restaurant> updateRestaurant(
+    String restaurantId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    return await _restaurantRepo.updateRestaurant(restaurantId, data, token);
+  }
+
+  Future<Restaurant> deleteRestaurant(
+    String restaurantId,
+    String userId,
+    String token,
+  ) async {
+    return await _restaurantRepo.deleteRestaurant(restaurantId, userId, token);
+  }
+
   Future<List<Restaurant>?> getAllReviewedRestaurant(String? token) async {
     return await _restaurantRepo.getAllReviewedRestaurant(token);
   }
