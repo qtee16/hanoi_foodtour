@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
+import 'package:hanoi_foodtour/view_models/food_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:hanoi_foodtour/widgets/custom_animated_fab.dart';
+import 'package:hanoi_foodtour/widgets/food_card_item.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -22,19 +22,29 @@ class ReviewOverviewScreen extends StatefulWidget {
 class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
   final scrollController = ScrollController();
   bool _showFab = true;
+  String type = "restaurant";
 
   @override
   void initState() {
     super.initState();
     updateMyRestaurant();
+    updateMyFood();
   }
 
   updateMyRestaurant() async {
-    final token = context.read<AuthViewModel>().token;
-    await context.read<RestaurantViewModel>().getAllReviewedRestaurant(token);
+    final auth = context.read<AuthViewModel>();
+    await context.read<RestaurantViewModel>().getAllReviewedRestaurant(auth.currentUser!.id, auth.token!);
   }
 
-  _buildChildWidget() {
+  updateMyFood() async {
+    final auth = context.read<AuthViewModel>();
+    await context.read<FoodViewModel>().getAllReviewedFood(auth.currentUser!.id, auth.token!);
+  }
+
+  _buildChildWidget(model) {
+    final List data = type == "restaurant"
+      ? model.reviewedRestaurants
+      : model.reviewedFoods;
     return Container(
       color: AppColors.whiteColor,
       child: NotificationListener<UserScrollNotification>(
@@ -55,31 +65,95 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
               await updateMyRestaurant();
             }();
           },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: scrollController,
-            child: Consumer<RestaurantViewModel>(
-              builder: (context, model, child) {
-                List<Restaurant> reviewedRestaurants =
-                    model.reviewedRestaurants;
-                return Column(
-                    children: reviewedRestaurants.map((e) {
-                  return Column(
-                    children: [
-                      RestaurantCardItem(
-                        restaurant: e,
-                        isShowBottomOption: true,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        if (type != "restaurant") {
+                          setState(() {
+                            type = "restaurant";
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 4, right: 4,),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8,),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: type == "restaurant" ? AppColors.mainColor : AppColors.whiteColor,
+                          border: Border.all(color: AppColors.mainColor)
+                        ),
+                        child: Text(
+                          "Quán ăn",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: type == "restaurant" ? AppColors.whiteColor : AppColors.mainColor,
+                          ),
+                        ),
                       ),
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColors.greyColor,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        if (type != "food") {
+                          setState(() {
+                            type = "food";
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 4, right: 4,),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8,),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: type == "food" ? AppColors.mainColor : AppColors.whiteColor,
+                          border: Border.all(color: AppColors.mainColor)
+                        ),
+                        child: Text(
+                          "Món ăn",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: type == "food" ? AppColors.whiteColor : AppColors.mainColor,
+                          ),
+                        ),
                       ),
-                    ],
-                  );
-                }).toList());
-              },
-            ),
+                    ),
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: scrollController,
+                child: Column(
+                  children: data.map((e) {
+                    return Column(
+                      children: [
+                        const Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: AppColors.greyColor,
+                        ),
+                        type == "restaurant"
+                          ? RestaurantCardItem(
+                            restaurant: e,
+                            isShowBottomOption: true,
+                          )
+                          : FoodCardItem(food: e,),
+                        if (e.id == data.last.id)
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: AppColors.greyColor,
+                          ),
+                      ],
+                    );
+                  }).toList() + [],
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -101,14 +175,17 @@ class _ReviewOverviewScreenState extends State<ReviewOverviewScreen> {
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
     final isLogin = authViewModel.isLogin;
+    final model = type == "restaurant"
+      ? context.watch<RestaurantViewModel>()
+      : context.watch<FoodViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Danh sách quán đã review",
+          "Review của bạn",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
-      body: isLogin ? _buildChildWidget() : _buildNotAuthWidget(),
+      body: isLogin ? _buildChildWidget(model) : _buildNotAuthWidget(),
       floatingActionButton: isLogin
           ? CustomAnimatedFAB(
               showFab: _showFab,

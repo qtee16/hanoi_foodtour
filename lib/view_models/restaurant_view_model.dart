@@ -23,28 +23,32 @@ class RestaurantViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Restaurant> updateRestaurant(
+  Future<void> updateRestaurant(
     String restaurantId,
     Map<String, dynamic> data,
     String token,
   ) async {
-    return await generalRepo.updateRestaurant(restaurantId, data, token);
+    Restaurant restaurant = await generalRepo.updateRestaurant(restaurantId, data, token);
+    int index = _reviewedRestaurants.indexWhere((element) => element.id == restaurantId);
+    _reviewedRestaurants.removeAt(index);
+    _reviewedRestaurants.insert(index, restaurant);
+    notifyListeners();
   }
 
-  Future<Restaurant> deleteRestaurant(
+  Future<void> deleteRestaurant(
     String restaurantId,
     String userId,
     String token,
   ) async {
-    return await generalRepo.deleteRestaurant(restaurantId, userId, token);
+    await generalRepo.deleteRestaurant(restaurantId, userId, token);
+    _reviewedRestaurants.removeWhere((element) => element.id == restaurantId);
+    notifyListeners();
   }
 
-  Future<void> getAllReviewedRestaurant(String? token) async {
-    final result = await generalRepo.getAllReviewedRestaurant(token);
-    if (result != null) {
-      _reviewedRestaurants = List.from(result);
+  Future<void> getAllReviewedRestaurant(String userId, String token) async {
+    final result = await generalRepo.getAllReviewedRestaurant(userId, token);
+    _reviewedRestaurants = List.from(result);
       notifyListeners();
-    }
   }
 
   Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {

@@ -1,12 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/models/food.dart';
+import 'package:hanoi_foodtour/view_models/food_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../routes/navigation_services.dart';
 import '../routes/routes.dart';
+import '../view_models/auth_view_model.dart';
 import '../view_models/like_view_model.dart';
+import 'app_toaster.dart';
 import 'cached_image_widget.dart';
+import 'custom_loading.dart';
 
 class FoodCardItem extends StatefulWidget {
   const FoodCardItem({super.key, required this.food});
@@ -32,9 +37,116 @@ class _FoodCardItemState extends State<FoodCardItem> {
     });
   }
 
+  renderTextAndIconDialog({icon, title}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(width: 10),
+        icon,
+        const SizedBox(width: 20),
+        Text(title, style: const TextStyle(color: AppColors.blackColor, fontSize: 18)),
+      ],
+    );
+  }
+
+  _showBottomOption() {
+    showCupertinoModalPopup(
+      context: context, 
+      builder: (subContext) {
+        final authViewModel = context.read<AuthViewModel>();
+        return CupertinoActionSheet(
+          actions: [
+            Container(
+              decoration: const BoxDecoration(color: AppColors.greyBackground),
+              child: CupertinoActionSheetAction(
+                onPressed: () {
+                  NavigationService().pop();
+                  NavigationService().pushNamed(
+                    ROUTE_REVIEW_FOOD,
+                    arguments: {
+                      "restaurantId": widget.food.restaurantId,
+                      "food" : widget.food,
+                    },
+                  );
+                },
+                child: renderTextAndIconDialog(
+                  icon: const Icon(Icons.edit,),
+                  title: "Chỉnh sửa"
+                )
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(color: AppColors.greyBackground),
+              child: CupertinoActionSheetAction(
+                onPressed: () {
+                  NavigationService().pop();
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (subContext) {
+                      return CupertinoAlertDialog(
+                        title: const Text("Xoá quán ăn"),
+                        content: const Text("Bạn có chắc chắn muốn xoá quán ăn?"),
+                        actions: [
+                          CupertinoButton(
+                            child: const Text("Xoá"),
+                            onPressed: () async {
+                              NavigationService().pop();
+                              showAppLoading(context);
+                              // ignore: use_build_context_synchronously
+                              await context
+                                  .read<FoodViewModel>()
+                                  .deleteFood(
+                                    widget.food.id,
+                                    authViewModel.currentUser!.id,
+                                    authViewModel.token!,
+                                  );
+                              NavigationService().pop();
+                              // ignore: use_build_context_synchronously
+                              AppToaster.showToast(
+                                context: context,
+                                msg: "Xoá quán ăn thành công",
+                                type: AppToasterType.success,
+                              );
+                            },
+                          ),
+                          CupertinoButton(
+                            child: const Text("Huỷ", style: TextStyle(color: AppColors.redColor),),
+                            onPressed: () {
+                              NavigationService().pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: renderTextAndIconDialog(
+                  icon: const Icon(Icons.delete,),
+                  title: "Xoá"
+                )
+              ),
+            ),
+          ],
+          cancelButton: Container(
+            decoration: BoxDecoration(color: AppColors.greyBackground, borderRadius: BorderRadius.circular(10)),
+            child: CupertinoActionSheetAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Huỷ')),
+          ),
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onLongPress: () {
+        _showBottomOption();
+      },
       onTap: () {
         NavigationService().pushNamed(
           ROUTE_FOOD_DETAIL,

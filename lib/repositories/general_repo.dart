@@ -86,8 +86,8 @@ class GeneralRepo {
     return await _restaurantRepo.deleteRestaurant(restaurantId, userId, token);
   }
 
-  Future<List<Restaurant>?> getAllReviewedRestaurant(String? token) async {
-    return await _restaurantRepo.getAllReviewedRestaurant(token);
+  Future<List<Restaurant>> getAllReviewedRestaurant(String userId, String token) async {
+    return await _restaurantRepo.getAllReviewedRestaurant(userId, token);
   }
 
   Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {
@@ -148,6 +148,26 @@ class GeneralRepo {
 
   Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
     return await _foodRepo.getTopRatingFoods(limit, page: page);
+  }
+
+  Future<List<Food>> getAllReviewedFood(String userId, String token) async {
+    return await _foodRepo.getAllReviewedFood(userId, token);
+  }
+
+  Future<Food> updateFood(
+    String foodId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    return await _foodRepo.updateFood(foodId, data, token);
+  }
+
+  Future<Food> deleteFood(
+    String foodId,
+    String userId,
+    String token,
+  ) async {
+    return await _foodRepo.deleteFood(foodId, userId, token); 
   }
   // ---------------------------------------
 

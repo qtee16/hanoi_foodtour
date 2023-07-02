@@ -3,7 +3,6 @@ import 'package:hanoi_foodtour/constants.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
-import 'package:hanoi_foodtour/view_models/user_view_model.dart';
 import 'package:hanoi_foodtour/views/profile/widgets/list_item.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:provider/provider.dart';

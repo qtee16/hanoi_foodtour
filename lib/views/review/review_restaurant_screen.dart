@@ -446,9 +446,9 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                       onCreateOrUpdateRestaurant(authViewModel.currentUser!.id, authViewModel.token!);
                     }
                   },
-                  child: const Text(
-                    'Review',
-                    style: TextStyle(
+                  child: Text(
+                    widget.restaurant != null ? "Chỉnh sửa" : 'Review',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
