@@ -55,4 +55,66 @@ class FoodRepo {
     }).toList();
     return result;
   }
+
+  Future<List<Food>> getAllReviewedFood(String userId, String token) async {
+    final response = await Dio().get(
+      "${Utils.apiUrl}/api/v1/review/food",
+      data: { "userId": userId },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    List<dynamic> responseData = response.data["data"];
+    final result = responseData.map((e) {
+      final restaurant = Food.fromJson(e);
+      return restaurant;
+    }).toList();
+    return result;
+  }
+
+  Future<Food> updateFood(
+    String foodId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    final response = await Dio().put(
+      "${Utils.apiUrl}/api/v1/review/food/$foodId",
+      data: data,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = Food.fromJson(responseData["data"]);
+    return restaurant;
+  }
+
+  Future<Food> deleteFood(
+    String foodId,
+    String userId,
+    String token,
+  ) async {
+    final response = await Dio().delete(
+      "${Utils.apiUrl}/api/v1/review/food/$foodId",
+      data: { "userId": userId },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = Food.fromJson(responseData["data"]);
+    return restaurant;
+  }
 }

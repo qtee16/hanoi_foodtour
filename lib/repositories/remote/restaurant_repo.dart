@@ -72,35 +72,24 @@ class RestaurantRepo {
     return restaurant;
   }
 
-  Future<List<Restaurant>?> getAllReviewedRestaurant(String? token) async {
-    final refs = await SharedPreferences.getInstance();
-    final encodeData = refs.getString("user_data");
-    if (encodeData == null) {
-      return null;
-    } else {
-      final userData = json.decode(encodeData);
-      final userId = userData["user_id"];
-      final body = {
-        "userId": userId,
-      };
-      final response = await Dio().get(
-        "${Utils.apiUrl}/api/v1/review/reviewed-restaurant",
-        data: body,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-        ),
-      );
-      List<dynamic> responseData = response.data["data"];
-      final result = responseData.map((e) {
-        final restaurant = Restaurant.fromJson(e);
-        return restaurant;
-      }).toList();
-      return result;
-    }
+  Future<List<Restaurant>> getAllReviewedRestaurant(String userId, String token) async {
+    final response = await Dio().get(
+      "${Utils.apiUrl}/api/v1/review/restaurant",
+      data: { "userId": userId },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    List<dynamic> responseData = response.data["data"];
+    final result = responseData.map((e) {
+      final restaurant = Restaurant.fromJson(e);
+      return restaurant;
+    }).toList();
+    return result;
   }
 
   Future<List<Restaurant>> getTopRatingRestaurants(int limit, {int page = 0}) async {

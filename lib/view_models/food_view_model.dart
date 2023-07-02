@@ -9,8 +9,14 @@ class FoodViewModel extends ChangeNotifier {
 
   FoodViewModel({required this.generalRepo});
 
-  Future<Food> createFood(Map<String, dynamic> data, String? token) async {
-    return await generalRepo.createFood(data, token);
+  List<Food> _reviewedFoods = [];
+
+  List<Food> get reviewedFoods => _reviewedFoods;
+
+  Future<void> createFood(Map<String, dynamic> data, String? token) async {
+    Food food = await generalRepo.createFood(data, token);
+    _reviewedFoods.insert(0, food);
+    notifyListeners();
   }
 
   Future<Food> getFoodById(String foodId) async {
@@ -19,6 +25,34 @@ class FoodViewModel extends ChangeNotifier {
 
   Future<List<Food>> getTopRatingFoods(int limit, {int page = 0}) async {
     return await generalRepo.getTopRatingFoods(limit, page: page);
+  }
+
+  Future<void> getAllReviewedFood(String userId, String token) async {
+    final result = await generalRepo.getAllReviewedFood(userId, token);
+    _reviewedFoods = List.from(result);
+    notifyListeners();
+  }
+
+  Future<void> updateFood(
+    String foodId,
+    Map<String, dynamic> data,
+    String token,
+  ) async {
+    Food food = await generalRepo.updateFood(foodId, data, token);
+    int index = _reviewedFoods.indexWhere((element) => element.id == foodId);
+    _reviewedFoods.removeAt(index);
+    _reviewedFoods.insert(index, food);
+    notifyListeners();
+  }
+
+  Future<void> deleteFood(
+    String foodId,
+    String userId,
+    String token,
+  ) async {
+    await generalRepo.deleteFood(foodId, userId, token);
+    _reviewedFoods.removeWhere((element) => element.id == foodId);
+    notifyListeners();
   }
 
   Future<void> ratingFood(Map<String, dynamic> data, String token) async {

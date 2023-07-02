@@ -93,10 +93,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case ROUTE_REVIEW_FOOD:
       String restaurantId = arguments["restaurantId"];
+      Food? food = arguments["food"];
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: ReviewFoodScreen(
           restaurantId: restaurantId,
+          food: food,
         ),
       );
     case ROUTE_SEARCH:
