@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/repositories/general_repo.dart';
 
@@ -15,19 +17,35 @@ class RestaurantViewModel extends ChangeNotifier {
   List<Restaurant> get reviewedRestaurants => _reviewedRestaurants;
 
   Future<void> createRestaurant(
+    File avatarFile,
+    File coverImageFile,
     Map<String, dynamic> data,
     String? token,
   ) async {
+    final avatarUrl = await generalRepo.uploadImage(avatarFile, data["userId"], token!);
+    final coverImageUrl = await generalRepo.uploadImage(coverImageFile, data["userId"], token);
+    data["avatarUrl"] = avatarUrl;
+    data["coverImageUrl"] = coverImageUrl;
     final restaurant = await generalRepo.createRestaurant(data, token);
     _reviewedRestaurants.insert(0, restaurant);
     notifyListeners();
   }
 
   Future<void> updateRestaurant(
+    File? avatarFile,
+    File? coverImageFile,
     String restaurantId,
     Map<String, dynamic> data,
     String token,
   ) async {
+    if (avatarFile != null) {
+      String avatarUrl = await generalRepo.uploadImage(avatarFile, data["userId"], token);
+      data["avatarUrl"] = avatarUrl;
+    }
+    if (coverImageFile != null) {
+      String coverImageUrl = await generalRepo.uploadImage(coverImageFile, data["userId"], token);
+      data["coverImageUrl"] = coverImageUrl;
+    }
     Restaurant restaurant = await generalRepo.updateRestaurant(restaurantId, data, token);
     int index = _reviewedRestaurants.indexWhere((element) => element.id == restaurantId);
     _reviewedRestaurants.removeAt(index);

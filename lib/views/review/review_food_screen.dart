@@ -73,9 +73,6 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
         isChanged = true;
       }
       if (foodImage != null) {
-        final imageEncode = await Utils.encodeImage(foodImage!);
-        updateData!["imageName"] = foodImage!.path.split('/').last;
-        updateData!["imageData"] = imageEncode;
         isChanged = true;
       }
       if (isChanged) {
@@ -83,6 +80,7 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
         showAppLoading(context);
         // ignore: use_build_context_synchronously
         await context.read<FoodViewModel>().updateFood(
+          foodImage,
           widget.food!.id,
           updateData!,
           token,
@@ -98,7 +96,6 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
       }
     } else {
       if (foodImage != null) {
-        final imageEncode = await Utils.encodeImage(foodImage!);
         final foodName = foodNameController.text.trim();
         final price = priceController.text.trim();
         final review = reviewController.text.trim();
@@ -108,17 +105,16 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
           "foodName": foodName,
           "category": selectCategory,
           "review": review,
-          "imageName": foodImage!.path.split('/').last,
-          "imageData": imageEncode,
           "price": price,
         };
         // ignore: use_build_context_synchronously
         showAppLoading(context);
         // ignore: use_build_context_synchronously
         await context.read<FoodViewModel>().createFood(
-              data,
-              token,
-            );
+          foodImage!,
+          data,
+          token,
+        );
         NavigationService().pop();
         NavigationService().pop();
         // ignore: use_build_context_synchronously
@@ -323,7 +319,7 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       onCreateOrUpdateFood(authViewModel.currentUser!.id, authViewModel.token!);
                     },
                     child: Text(

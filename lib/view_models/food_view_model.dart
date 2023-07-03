@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../models/food.dart';
@@ -13,7 +15,9 @@ class FoodViewModel extends ChangeNotifier {
 
   List<Food> get reviewedFoods => _reviewedFoods;
 
-  Future<void> createFood(Map<String, dynamic> data, String? token) async {
+  Future<void> createFood(File imageFile, Map<String, dynamic> data, String? token) async {
+    String imageUrl = await generalRepo.uploadImage(imageFile, data["userId"], token!);
+    data["imageUrl"] = imageUrl;
     Food food = await generalRepo.createFood(data, token);
     _reviewedFoods.insert(0, food);
     notifyListeners();
@@ -34,10 +38,15 @@ class FoodViewModel extends ChangeNotifier {
   }
 
   Future<void> updateFood(
+    File? foodImage,
     String foodId,
     Map<String, dynamic> data,
     String token,
   ) async {
+    if (foodImage != null) {
+      final imageUrl = await generalRepo.uploadImage(foodImage, data["userId"], token);
+      data["imageUrl"] = imageUrl;
+    }
     Food food = await generalRepo.updateFood(foodId, data, token);
     int index = _reviewedFoods.indexWhere((element) => element.id == foodId);
     _reviewedFoods.removeAt(index);

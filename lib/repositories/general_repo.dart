@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hanoi_foodtour/models/user.dart';
 import 'package:hanoi_foodtour/repositories/remote/auth_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/comment_repo.dart';
@@ -6,6 +8,7 @@ import 'package:hanoi_foodtour/repositories/remote/like_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/rating_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/restaurant_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/search_repo.dart';
+import 'package:hanoi_foodtour/repositories/remote/upload_repo.dart';
 import 'package:hanoi_foodtour/repositories/remote/user_repo.dart';
 import 'package:injectable/injectable.dart';
 
@@ -24,6 +27,7 @@ class GeneralRepo {
   final SearchRepo _searchRepo;
   final CommentRepo _commentRepo;
   final LikeRepo _likeRepo;
+  final UploadRepo _uploadRepo;
 
   GeneralRepo(
     this._authRepo,
@@ -34,6 +38,7 @@ class GeneralRepo {
     this._searchRepo,
     this._commentRepo,
     this._likeRepo,
+    this._uploadRepo,
   );
 
   // -------------- Auth repo --------------
@@ -198,6 +203,12 @@ class GeneralRepo {
 
   Future<List> getMyLikes(String userId, String type, String token) async {
     return await _likeRepo.getMyLikes(userId, type, token);
+  }
+  // ---------------------------------------
+
+  // -------------- Upload repo --------------
+  Future<String> uploadImage(File file, String userId, String token) async {
+    return await _uploadRepo.uploadImage(file, userId, token);
   }
   // ---------------------------------------
 

@@ -9,7 +9,6 @@ import 'package:hanoi_foodtour/routes/navigation_services.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/services/location_service.dart';
 import 'package:hanoi_foodtour/services/select_image.dart';
-import 'package:hanoi_foodtour/utils/utils.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:hanoi_foodtour/widgets/cached_image_widget.dart';
 import 'package:hanoi_foodtour/widgets/custom_loading.dart';
@@ -81,15 +80,9 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
         isChanged = true;
       }
       if (restaurantAvatar != null) {
-        final avatarEncode = await Utils.encodeImage(restaurantAvatar!);
-        updateData!["avatarName"] = restaurantAvatar!.path.split('/').last;
-        updateData!["avatarData"] = avatarEncode;
         isChanged = true;
       }
       if (restaurantCoverImage != null) {
-        final coverImageEncode = await Utils.encodeImage(restaurantCoverImage!);
-        updateData!["coverImageName"] = restaurantCoverImage!.path.split('/').last;
-        updateData!["coverImageData"] = coverImageEncode;
         isChanged = true;
       }
       if (isChanged) {
@@ -99,6 +92,8 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
         await context
             .read<RestaurantViewModel>()
             .updateRestaurant(
+              restaurantAvatar,
+              restaurantCoverImage,
               widget.restaurant!.id,
               updateData!,
               token,
@@ -114,10 +109,6 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
       }
     } else {
       if (restaurantAvatar != null && restaurantCoverImage != null) {
-        final avatarEncode =
-            await Utils.encodeImage(restaurantAvatar!);
-        final coverImageEncode =
-            await Utils.encodeImage(restaurantCoverImage!);
         final restaurantName =
             restaurantNameController.text.trim();
         final address = addressController.text.trim();
@@ -131,21 +122,18 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
           "locationLat": locationLat,
           "locationLong": locationLong,
           "review": review,
-          "avatarName": restaurantAvatar!.path.split('/').last,
-          "avatarData": avatarEncode,
-          "coverImageName":
-              restaurantCoverImage!.path.split('/').last,
-          "coverImageData": coverImageEncode,
         };
         // ignore: use_build_context_synchronously
         showAppLoading(context);
         // ignore: use_build_context_synchronously
         await context
-            .read<RestaurantViewModel>()
-            .createRestaurant(
-              data,
-              token,
-            );
+        .read<RestaurantViewModel>()
+        .createRestaurant(
+          restaurantAvatar!,
+          restaurantCoverImage!,
+          data,
+          token,
+        );
         NavigationService().pop();
         NavigationService().pop();
         // ignore: use_build_context_synchronously
