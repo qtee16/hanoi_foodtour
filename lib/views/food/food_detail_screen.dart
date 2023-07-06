@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../models/rating.dart';
 import '../../routes/navigation_services.dart';
+import '../../utils/utils.dart';
 import '../../view_models/auth_view_model.dart';
 import '../../view_models/like_view_model.dart';
 import '../../view_models/restaurant_view_model.dart';
@@ -143,7 +144,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: maxWidth,
                 height: 360,
                 child: Stack(
@@ -470,7 +471,15 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 backgroundColor: MaterialStateColor.resolveWith(
                     (states) => AppColors.mainColor),
               ),
-              onPressed: () {},
+              onPressed: () {
+                try {
+                  if (restaurant != null) {
+                  Utils.openMap(restaurant!.locationLat, restaurant!.locationLong);
+                  }
+                } catch (e) {
+                  print(e);
+                }
+              },
               child: Row(
                 children: [
                   Image.asset(

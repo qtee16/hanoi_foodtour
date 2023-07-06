@@ -537,7 +537,13 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 backgroundColor: MaterialStateColor.resolveWith(
                     (states) => AppColors.mainColor),
               ),
-              onPressed: () {},
+              onPressed: () {
+                try {
+                  Utils.openMap(widget.restaurant.locationLat, widget.restaurant.locationLong);
+                } catch (e) {
+                  print(e);
+                }
+              },
               child: Row(
                 children: [
                   Image.asset(

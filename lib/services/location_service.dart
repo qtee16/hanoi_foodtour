@@ -34,6 +34,6 @@ class LocationService {
     final hasPermission = await handleLocationPermission();
 
     if (!hasPermission) return null;
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
 }
