@@ -14,6 +14,7 @@ class AppColors {
   static const greyBorder = Color(0xFFC2BEBE);
   static const yellowColor = Color(0xFFFFD864);
   static const redColor = Colors.red;
+  static const greyTitle = Color(0xFF666666);
 }
 
 class AssetPaths {

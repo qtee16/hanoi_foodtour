@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/repositories/general_repo.dart';
@@ -19,6 +21,18 @@ class UserViewModel extends ChangeNotifier {
 
   Future<User?> getUserById(String userId) async {
     return await generalRepo.getUserById(userId);
+  }
+
+  Future<User> updateUserAvatar(String userId, File avatar, String token) async {
+    String avatarUrl = await generalRepo.uploadImage(avatar, userId, token);
+    final data = {
+      "avatarUrl": avatarUrl,
+    };
+    return await generalRepo.updateUser(userId, data, token);
+  }
+
+  Future<User> updateUser(String userId, Map<String, dynamic> data, String token) async {
+    return await generalRepo.updateUser(userId, data, token);
   }
 
   Future<void> getMyLikes(String userId, String type, String token) async {

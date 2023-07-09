@@ -63,4 +63,21 @@ class UserRepo {
       return null;
     }
   }
+
+  Future<User> updateUser(String userId, Map<String, dynamic> data, String token) async {
+    final response = await Dio().put(
+      "${Utils.apiUrl}/api/v1/users/$userId",
+      data: data,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    final responseData = response.data;
+    final restaurant = User.fromJson(responseData["data"]);
+    return restaurant;
+  }
 }
