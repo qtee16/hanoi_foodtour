@@ -244,18 +244,19 @@ class _ReviewFoodScreenState extends State<ReviewFoodScreen> {
                         child: InkWell(
                           onTap: () async {
                             try {
-                              File image = await SelectImage.selectImage();
-                              setState(() {
-                                foodImage = image;
-                              });
+                              File? image = await SelectImage.selectImage();
+                              if (image != null) {
+                                setState(() {
+                                  foodImage = image;
+                                });
+                              }
                             } on PlatformException catch (e) {
                               if (e.code == 'read_external_storage_denied') {
-                                // AppToaster.showToast(
-                                //   context: context,
-                                //   msg: ConstantStrings
-                                //       .appString.needAcceptReadRule,
-                                //   type: AppToasterType.warning,
-                                // );
+                                AppToaster.showToast(
+                                  context: context,
+                                  msg: "Cần cấp quyền truy cập để tiếp tục",
+                                  type: AppToasterType.warning,
+                                );
                               }
                             }
                           },

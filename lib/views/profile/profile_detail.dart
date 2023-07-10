@@ -84,10 +84,12 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           child: InkWell(
                             onTap: () async {
                               try {
-                                File image = await SelectImage.selectImage();
-                                setState(() {
-                                  avatarImage = image;
-                                });
+                                File? image = await SelectImage.selectImage();
+                                if (image != null) {
+                                  setState(() {
+                                    avatarImage = image;
+                                  });
+                                }
                                 if (currentUser != null && avatarImage != null) {
                                   // ignore: use_build_context_synchronously
                                   final newUser = await context.read<UserViewModel>().updateUserAvatar(currentUser.id, avatarImage!, token!);
@@ -102,6 +104,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                     type: AppToasterType.warning,
                                   );
                                 }
+                              } catch (e) {
+                                print(e);
                               }
                             },
                             child: Container(
