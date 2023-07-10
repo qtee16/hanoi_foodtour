@@ -2,29 +2,28 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:hanoi_foodtour/exception.dart';
+import 'package:hanoi_foodtour/models/user.dart';
 import 'package:hanoi_foodtour/utils/utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @singleton
 class AuthRepo {
-  Future<Map<String, dynamic>> signIn({
+  Future<User> signIn({
     required String email,
     required String password,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final data = {
-      "email": email,
-      "password": password,
-    };
-    final response = await Dio().post(
-      "${Utils.apiUrl}/api/login",
-      data: data,
-    );
-    final responseData = response.data;
-
-    // process response
-    if (responseData["status"] == "success") {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final body = {
+        "email": email,
+        "password": password,
+      };
+      final response = await Dio().post(
+        "${Utils.apiUrl}/api/v1/login",
+        data: body,
+      );
+      final responseData = response.data;
       final token = responseData["token"];
       final data = responseData["data"];
       final userData = {
@@ -39,37 +38,41 @@ class AuthRepo {
         "email": data["email"],
         "avatarUrl": data["avatarUrl"],
       };
-      return currentUserMap;
-    } else if (responseData["status"] == "error") {
-      if (responseData["message"] == "email-incorrect" ||
-          responseData["message"] == "password-incorrect") {
-        throw EmailOrPasswordIncorrectException();
+      final user = User.fromJson(currentUserMap);
+      return user;
+    } catch (e) {
+      if (e is DioException) {
+        print(1);
+        print(e.message);
+        final responseError = e.response!.data;
+        print(2);
+        if (responseError["message"] == "email-incorrect" ||
+            responseError["message"] == "password-incorrect") {
+          throw EmailOrPasswordIncorrectException();
+        }
+        throw GenericException();
       }
-      throw GenericException();
-    } else {
       throw GenericException();
     }
   }
 
-  Future<Map<String, dynamic>> signUp({
+  Future<User> signUp({
     required String name,
     required String email,
     required String password,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final data = {
-      "username": name,
-      "email": email,
-      "password": password,
-    };
-    final response = await Dio().post(
-      '${Utils.apiUrl}/api/register',
-      data: data,
-    );
-    final responseData = response.data;
-
-    // process response
-    if (responseData["status"] == "success") {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final body = {
+        "username": name,
+        "email": email,
+        "password": password,
+      };
+      final response = await Dio().post(
+        '${Utils.apiUrl}/api/v1/register',
+        data: body,
+      );
+      final responseData = response.data;
       final token = responseData["token"];
       final data = responseData["data"];
       final userData = {
@@ -84,13 +87,16 @@ class AuthRepo {
         "email": data["email"],
         "avatarUrl": data["avatarUrl"],
       };
-      return currentUserMap;
-    } else if (responseData["status"] == "error") {
-      if (responseData["message"] == "email-already-in-use") {
-        throw EmailAlreadyInUseAuthException();
+      final user = User.fromJson(currentUserMap);
+      return user;
+    } catch (e) {
+      if (e is DioException) {
+        final responseError = e.response!.data;
+        if (responseError["message"] == "email-already-in-use") {
+          throw EmailAlreadyInUseAuthException();
+        }
+        throw GenericException();
       }
-      throw GenericException();
-    } else {
       throw GenericException();
     }
   }

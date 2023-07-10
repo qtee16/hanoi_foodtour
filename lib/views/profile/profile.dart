@@ -23,7 +23,6 @@ class _ProfileState extends State<Profile> {
     bool isLogin = currentUser != null;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         title: const Text(
           "Thông tin cá nhân",
@@ -40,8 +39,8 @@ class _ProfileState extends State<Profile> {
           GestureDetector(
             onTap: () {
               isLogin
-                  ? NavigationService().pushNamed(ROUTER_PROFILE_DETAIL)
-                  : NavigationService().pushNamed(ROUTER_SIGN_IN);
+                  ? NavigationService().pushNamed(ROUTE_PROFILE_DETAIL)
+                  : NavigationService().pushNamed(ROUTE_SIGN_IN);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -113,7 +112,16 @@ class _ProfileState extends State<Profile> {
           ListItem(
             icon: AssetPaths.iconPath.getRestaurantIconPath,
             title: "Danh sách quán yêu thích",
-            callback: () {},
+            onTap: () {
+              NavigationService().pushNamed(
+                ROUTE_FAVORITE,
+                arguments: {
+                  "title": "Danh sách quán yêu thích",
+                  "type": "my-liked-restaurant",
+                  "isFood": false,
+                }
+              );
+            },
           ),
           const Divider(
             height: 1,
@@ -123,7 +131,15 @@ class _ProfileState extends State<Profile> {
           ListItem(
             icon: AssetPaths.iconPath.getFoodIconPath,
             title: "Danh sách món ăn yêu thích",
-            callback: () {},
+            onTap: () {
+              NavigationService().pushNamed(
+                ROUTE_FAVORITE,
+                arguments: {
+                  "title": "Danh sách quán yêu thích",
+                  "type": "my-liked-food",
+                }
+              );
+            },
           ),
           const Divider(
             height: 1,
@@ -133,7 +149,19 @@ class _ProfileState extends State<Profile> {
           ListItem(
             icon: AssetPaths.iconPath.getMapIconPath,
             title: "Danh sách các quán đã đi",
-            callback: () {},
+            onTap: () {},
+          ),
+          const Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.greyColor,
+          ),
+          ListItem(
+            icon: AssetPaths.iconPath.getReviewIconPath,
+            title: "Review của bạn",
+            onTap: () {
+              NavigationService().pushNamed(ROUTE_REVIEW_OVERVIEW);
+            },
           ),
         ],
       ),
