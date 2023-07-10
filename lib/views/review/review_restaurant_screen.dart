@@ -259,10 +259,12 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                       child: InkWell(
                         onTap: () async {
                           try {
-                            File image = await SelectImage.selectImage();
-                            setState(() {
-                              restaurantAvatar = image;
-                            });
+                            File? image = await SelectImage.selectImage();
+                            if (image != null) {
+                              setState(() {
+                                restaurantAvatar = image;
+                              });
+                            }
                           } on PlatformException catch (e) {
                             if (e.code == 'read_external_storage_denied') {
                               AppToaster.showToast(
@@ -332,10 +334,12 @@ class _ReviewRestaurantScreenState extends State<ReviewRestaurantScreen> {
                       child: InkWell(
                         onTap: () async {
                           try {
-                            File image = await SelectImage.selectImage();
-                            setState(() {
-                              restaurantCoverImage = image;
-                            });
+                            File? image = await SelectImage.selectImage();
+                            if (image != null) {
+                              setState(() {
+                                restaurantCoverImage = image;
+                              });
+                            }
                           } on PlatformException catch (e) {
                             if (e.code == 'read_external_storage_denied') {
                               AppToaster.showToast(
