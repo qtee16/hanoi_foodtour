@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hanoi_foodtour/routes/navigation_services.dart';
@@ -168,34 +169,67 @@ class _ProfileDetailState extends State<ProfileDetail> {
             ),
           ),
           const SizedBox(height: 16,),
-          Container(
-            height: 48,
-            color: AppColors.whiteColor,
-            padding: const EdgeInsets.only(left: 16, right: 18,),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  "Đổi mật khẩu",
-                  style: TextStyle(
-                    fontSize: 16,
+          InkWell(
+            onTap: () {
+              NavigationService().pushNamed(ROUTE_CHANGE_PASSWORD);
+            },
+            child: Container(
+              height: 48,
+              color: AppColors.whiteColor,
+              padding: const EdgeInsets.only(left: 16, right: 18,),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Đổi mật khẩu",
+                    style: TextStyle(
+                      color: AppColors.greyTitle,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const Icon(Icons.arrow_forward_ios, color: AppColors.greyTitle, size: 16,),
-                )
-              ],
+                  Icon(Icons.arrow_forward_ios, color: AppColors.greyTitle, size: 16,)
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 16,),
           InkWell(
             onTap: () async {
-              NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
-              await context.read<AuthViewModel>().signOut();
-              // ignore: use_build_context_synchronously
-              context.read<RestaurantViewModel>().clearData();
+              showCupertinoDialog(
+                context: context,
+                builder: (subContext) {
+                  return CupertinoAlertDialog(
+                    title: const Text("Đăng xuất"),
+                    content: const Text("Bạn có chắc chắn muốn đăng xuất?"),
+                    actions: [
+                      CupertinoButton(
+                        child: const Text("Đăng xuất"),
+                        onPressed: () async {
+                          NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
+                          await context.read<AuthViewModel>().signOut();
+                          // ignore: use_build_context_synchronously
+                          context.read<RestaurantViewModel>().clearData();
+                          // ignore: use_build_context_synchronously
+                          AppToaster.showToast(
+                            context: context,
+                            msg: "Đăng xuất thành công",
+                            type: AppToasterType.success,
+                          );
+                        },
+                      ),
+                      CupertinoButton(
+                        child: const Text("Huỷ", style: TextStyle(color: AppColors.redColor),),
+                        onPressed: () {
+                          NavigationService().pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+              
             },
             child: Container(
               color: AppColors.whiteColor,

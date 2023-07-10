@@ -71,6 +71,10 @@ class GeneralRepo {
   Future<User> updateUser(String userId, Map<String, dynamic> data, String token) async {
     return _userRepo.updateUser(userId, data, token);
   }
+
+  Future<void> changePassword(String userId, Map<String, dynamic> data, String token) async {
+    await _userRepo.changePassword(userId, data, token);
+  }
   // ---------------------------------------
 
   // -------------- Restaurant repo --------------

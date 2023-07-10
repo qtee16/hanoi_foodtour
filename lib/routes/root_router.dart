@@ -7,6 +7,7 @@ import 'package:hanoi_foodtour/views/comment/comment_screen.dart';
 import 'package:hanoi_foodtour/views/favorite/favorite_screen.dart';
 import 'package:hanoi_foodtour/views/food/food_detail_screen.dart';
 import 'package:hanoi_foodtour/views/home/home_screen.dart';
+import 'package:hanoi_foodtour/views/profile/change_password_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
 import 'package:hanoi_foodtour/views/profile/update_info_detail.dart';
@@ -130,6 +131,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: UpdateInfoDetail(title: title, type: type)
+      );
+    case ROUTE_CHANGE_PASSWORD:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const ChangePasswordScreen()
       );
     default:
       return MaterialPageRoute(

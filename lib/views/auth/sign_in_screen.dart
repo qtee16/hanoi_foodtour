@@ -126,7 +126,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                       type: AppToasterType.success,
                                     );
                                   } catch (e) {
-                                    print(e);
                                     if (e
                                         is EmailOrPasswordIncorrectException) {
                                       NavigationService().pop();
