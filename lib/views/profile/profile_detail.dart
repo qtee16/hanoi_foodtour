@@ -8,7 +8,6 @@ import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
 import 'package:hanoi_foodtour/view_models/restaurant_view_model.dart';
 import 'package:hanoi_foodtour/view_models/user_view_model.dart';
-import 'package:hanoi_foodtour/views/profile/widgets/info_text_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -27,10 +26,29 @@ class ProfileDetail extends StatefulWidget {
 class _ProfileDetailState extends State<ProfileDetail> {
   File? avatarImage;
 
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    emailController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     String? token = context.read<AuthViewModel>().token;
     User? currentUser = context.watch<AuthViewModel>().currentUser;
+    nameController.text = currentUser?.username ?? "";
+    emailController.text = currentUser?.email ?? "";
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -126,40 +144,81 @@ class _ProfileDetailState extends State<ProfileDetail> {
                     )
                   ),
                 ),
-                InfoTextField(
-                  title: "Tên",
-                  content: currentUser?.username ?? "",
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      NavigationService().pushNamed(
-                        ROUTE_UPDATE_INFO_DETAIL,
-                        arguments: {
-                          "title": "Thay đổi tên",
-                          "type": "name",
-                        },
-                      );
-                    },
-                    child: const Icon(Icons.edit, color: AppColors.greyTitle,),
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Tên",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: AppColors.greyTitle,
+                      ),
+                    ),
+                    const SizedBox(height: 6,),
+                    TextFormField(
+                      style: const TextStyle(fontSize: 16),
+                      controller: nameController,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            NavigationService().pushNamed(
+                              ROUTE_UPDATE_INFO_DETAIL,
+                              arguments: {
+                                "title": "Thay đổi tên",
+                                "type": "name",
+                              },
+                            );
+                          },
+                          child: const Icon(Icons.edit, color: AppColors.greyTitle,),
+                        ),
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD9D9D9))
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD9D9D9))
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16,),
+                    const Text(
+                      "Email",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: AppColors.greyTitle,
+                      ),
+                    ),
+                    const SizedBox(height: 6,),
+                    TextFormField(
+                      style: const TextStyle(fontSize: 16),
+                      controller: emailController,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            NavigationService().pushNamed(
+                              ROUTE_UPDATE_INFO_DETAIL,
+                              arguments: {
+                                "title": "Thay đổi email",
+                                "type": "email",
+                              },
+                            );
+                          },
+                          child: const Icon(Icons.edit, color: AppColors.greyTitle,),
+                        ),
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD9D9D9))
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD9D9D9))
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16,),
+                  ],
                 ),
-                const SizedBox(height: 16,),
-                InfoTextField(
-                  title: "Email",
-                  content: currentUser?.email ?? "",
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      NavigationService().pushNamed(
-                        ROUTE_UPDATE_INFO_DETAIL,
-                        arguments: {
-                          "title": "Thay đổi email",
-                          "type": "email",
-                        },
-                      );
-                    },
-                    child: const Icon(Icons.edit, color: AppColors.greyTitle,),
-                  ),
-                ),
-                const SizedBox(height: 16,),
                 // InfoTextField(
                 //   title: "Số điện thoại",
                 //   content: "",

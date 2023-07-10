@@ -146,16 +146,16 @@ class _ProfileState extends State<Profile> {
             thickness: 1,
             color: AppColors.greyColor,
           ),
-          ListItem(
-            icon: AssetPaths.iconPath.getMapIconPath,
-            title: "Danh sách các quán đã đi",
-            onTap: () {},
-          ),
-          const Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.greyColor,
-          ),
+          // ListItem(
+          //   icon: AssetPaths.iconPath.getMapIconPath,
+          //   title: "Danh sách các quán đã đi",
+          //   onTap: () {},
+          // ),
+          // const Divider(
+          //   height: 1,
+          //   thickness: 1,
+          //   color: AppColors.greyColor,
+          // ),
           ListItem(
             icon: AssetPaths.iconPath.getReviewIconPath,
             title: "Review của bạn",
