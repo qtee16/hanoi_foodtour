@@ -79,4 +79,8 @@ class UserViewModel extends ChangeNotifier {
     _likedFoods.removeWhere((element) => element.id == foodId);
     notifyListeners();
   }
+
+  Future<void> changePassword(String userId, Map<String, dynamic> data, String token) async {
+    await generalRepo.changePassword(userId, data, token);
+  }
 }

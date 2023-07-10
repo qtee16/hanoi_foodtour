@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:hanoi_foodtour/exception.dart';
 import 'package:hanoi_foodtour/models/user.dart';
 import 'package:hanoi_foodtour/utils/utils.dart';
 import 'package:injectable/injectable.dart';
@@ -18,7 +19,7 @@ class UserRepo {
       final userId = userData["user_id"];
       final token = userData["token"];
       final response = await Dio().get(
-        "${Utils.apiUrl}/api/v1/users/currentUser/$userId", 
+        "${Utils.apiUrl}/api/v1/users/current_user/$userId", 
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -79,5 +80,30 @@ class UserRepo {
     final responseData = response.data;
     final restaurant = User.fromJson(responseData["data"]);
     return restaurant;
+  }
+
+  Future<void> changePassword(String userId, Map<String, dynamic> data, String token) async {
+    try {
+      await Dio().put(
+        "${Utils.apiUrl}/api/v1/users/$userId/change_password",
+        data: data,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+    } catch (e) {
+      if (e is DioException) {
+        final responseError = e.response!.data;
+        if (responseError["message"] == "current-password-incorrect") {
+          throw IncorrectCurrentPasswordException();
+        }
+        throw GenericException();
+      }
+      throw GenericException();
+    }
   }
 }
