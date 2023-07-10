@@ -13,3 +13,4 @@ const String ROUTE_REVIEW_FOOD = '/review-food';
 const String ROUTE_SEARCH = '/search';
 const String ROUTE_LIST_DETAIL = '/list-detail';
 const String ROUTE_FAVORITE = '/favorite';
+const String ROUTE_UPDATE_INFO_DETAIL = '/update-info-detail';

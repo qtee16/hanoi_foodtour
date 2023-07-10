@@ -5,11 +5,12 @@ class ListItem extends StatelessWidget {
   final String icon;
   final String title;
   final Function onTap;
-  const ListItem(
-      {super.key,
-      required this.icon,
-      required this.title,
-      required this.onTap});
+  const ListItem({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {

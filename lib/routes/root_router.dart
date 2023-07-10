@@ -9,6 +9,7 @@ import 'package:hanoi_foodtour/views/food/food_detail_screen.dart';
 import 'package:hanoi_foodtour/views/home/home_screen.dart';
 import 'package:hanoi_foodtour/views/profile/profile.dart';
 import 'package:hanoi_foodtour/views/profile/profile_detail.dart';
+import 'package:hanoi_foodtour/views/profile/update_info_detail.dart';
 import 'package:hanoi_foodtour/views/restaurant/restaurant_detail_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_food_screen.dart';
 import 'package:hanoi_foodtour/views/review/review_overview_screen.dart';
@@ -122,6 +123,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: FavoriteScreen(title: title, type: type, isFood: isFood ?? true,),
+      );
+    case ROUTE_UPDATE_INFO_DETAIL:
+      String title = arguments["title"];
+      String type = arguments["type"];
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: UpdateInfoDetail(title: title, type: type)
       );
     default:
       return MaterialPageRoute(

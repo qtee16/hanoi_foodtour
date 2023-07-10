@@ -47,6 +47,8 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
   List<Food> foods = [];
   List likedData = [];
 
+  bool isEmptyFood = false;
+
   @override
   void initState() {
     super.initState();
@@ -104,6 +106,9 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
         .getAllFoodOfRestaurant(widget.restaurant.id);
     setState(() {
       foods = List.from(foodList);
+      if (foodList.isEmpty) {
+        isEmptyFood = true;
+      }
     });
     updateCategories();
   }
@@ -325,42 +330,44 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Wrap(
-                          children: categories.isNotEmpty
-                          ? categories.map((item) {
-                            return Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Colors.orange),
-                              child: Text(
-                                Utils.categoriesMap[item].toString(),
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
-                              ),
-                            );
-                          }).toList()
-                          : [
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              child: const ShimmerLoading(width: 60, height: 28, border: 16,),
+                        isEmptyFood
+                          ? const SizedBox()
+                          : Wrap(
+                              children: categories.isNotEmpty
+                                ? categories.map((item) {
+                                  return Container(
+                                    margin:
+                                        const EdgeInsets.only(bottom: 4, right: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: Colors.orange),
+                                    child: Text(
+                                      Utils.categoriesMap[item].toString(),
+                                      style: const TextStyle(
+                                          color: AppColors.whiteColor),
+                                    ),
+                                  );
+                                }).toList()
+                                : [
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.only(bottom: 4, right: 4),
+                                    child: const ShimmerLoading(width: 60, height: 28, border: 16,),
+                                  ),
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.only(bottom: 4, right: 4),
+                                    child: const ShimmerLoading(width: 60, height: 28, border: 16,),
+                                  ),
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.only(bottom: 4, right: 4),
+                                    child: const ShimmerLoading(width: 60, height: 28, border: 16,),
+                                  ),
+                                ],
                             ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              child: const ShimmerLoading(width: 60, height: 28, border: 16,),
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 4, right: 4),
-                              child: const ShimmerLoading(width: 60, height: 28, border: 16,),
-                            ),
-                          ],
-                        ),
                         const SizedBox(
                           height: 16,
                         ),
@@ -414,12 +421,14 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               const SizedBox(
                 height: 8,
               ),
-              ListCardItem(
-                title: "Menu của quán",
-                subTitle: "Khám phá các món ăn đa dạng",
-                data: foods,
-                type: "restaurant-menu",
-              ),
+              isEmptyFood
+                ? const SizedBox()
+                : ListCardItem(
+                  title: "Menu của quán",
+                  subTitle: "Khám phá các món ăn đa dạng",
+                  data: foods,
+                  type: "restaurant-menu",
+                ),
               const SizedBox(
                 height: 8,
               ),
