@@ -70,7 +70,6 @@ class MyApp extends StatelessWidget {
       child: OKToast(
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
           theme: ThemeData.light().copyWith(
               useMaterial3: true, textTheme: GoogleFonts.montserratTextTheme()),
           navigatorKey: navigationService.navigationKey,
