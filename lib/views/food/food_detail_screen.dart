@@ -4,6 +4,7 @@ import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/routes/routes.dart';
 import 'package:hanoi_foodtour/view_models/food_view_model.dart';
 import 'package:hanoi_foodtour/view_models/user_view_model.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -138,7 +139,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width;
-
+    final formatter = NumberFormat.decimalPattern();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -202,7 +203,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                               height: 12,
                             ),
                             Text(
-                              "${widget.food.price} VND",
+                              "${formatter.format(widget.food.price)} VND",
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -401,6 +402,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               ),
               ContentContainer(
                 title: "Bình luận",
+                isCommentWidget: true,
                 contentWidget: CommentWidget(
                   objectId: widget.food.id,
                   type: "food",

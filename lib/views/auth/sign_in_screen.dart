@@ -7,6 +7,7 @@ import 'package:hanoi_foodtour/view_models/auth_view_model.dart';
 import 'package:hanoi_foodtour/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 
+import '../../view_models/user_view_model.dart';
 import '../../widgets/app_toaster.dart';
 import '../../widgets/custom_text_field.dart';
 
@@ -109,13 +110,13 @@ class _SignInScreenState extends State<SignInScreen> {
                                           email: email,
                                           password: password,
                                         );
-                                    final token =
-                                        // ignore: use_build_context_synchronously
-                                        context.read<AuthViewModel>().token;
                                     // ignore: use_build_context_synchronously
-                                    print("Token: $token");
-
+                                    final auth = context.read<AuthViewModel>();
                                     NavigationService().pop();
+                                    // ignore: use_build_context_synchronously
+                                    context.read<UserViewModel>().getMyLikes(auth.currentUser!.id, "restaurant", auth.token!);
+                                    // ignore: use_build_context_synchronously
+                                    context.read<UserViewModel>().getMyLikes(auth.currentUser!.id, "food", auth.token!);
                                     NavigationService()
                                         .pushNameAndRemoveUntil(ROUTE_HOME);
                                     // ignore: use_build_context_synchronously

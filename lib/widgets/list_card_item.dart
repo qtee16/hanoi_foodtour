@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/models/food.dart';
 import 'package:hanoi_foodtour/models/restaurant.dart';
 import 'package:hanoi_foodtour/widgets/shimmer_loading.dart';
+import 'package:intl/intl.dart';
 
 import '../constants.dart';
 import '../routes/navigation_services.dart';
@@ -25,6 +26,7 @@ class ListCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat.decimalPattern();
     return Container(
       padding: const EdgeInsets.only(bottom: 8),
       width: double.infinity,
@@ -148,7 +150,7 @@ class ListCardItem extends StatelessWidget {
                                           width: 8,
                                         ),
                                         Text(
-                                          "${(item as Food).price} VND",
+                                          "${formatter.format((item as Food).price)} VND",
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,

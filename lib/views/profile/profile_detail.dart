@@ -192,10 +192,10 @@ class _ProfileDetailState extends State<ProfileDetail> {
           const SizedBox(height: 16,),
           InkWell(
             onTap: () async {
+              NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
               await context.read<AuthViewModel>().signOut();
               // ignore: use_build_context_synchronously
               context.read<RestaurantViewModel>().clearData();
-              NavigationService().pushNameAndRemoveUntil(ROUTE_HOME);
             },
             child: Container(
               color: AppColors.whiteColor,

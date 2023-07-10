@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hanoi_foodtour/models/food.dart';
 import 'package:hanoi_foodtour/view_models/food_view_model.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -143,6 +144,7 @@ class _FoodCardItemState extends State<FoodCardItem> {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat.decimalPattern();
     return InkWell(
       onLongPress: () {
         _showBottomOption();
@@ -196,7 +198,7 @@ class _FoodCardItemState extends State<FoodCardItem> {
                         width: 8,
                       ),
                       Text(
-                        "${widget.food.price} VND",
+                        "${formatter.format(widget.food.price)} VND",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
